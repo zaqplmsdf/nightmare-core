@@ -54,14 +54,6 @@ def item(value):
 
 def main():
     shaped(
-        "nightmare_core",
-        ["ASA", "SES", "ASA"],
-        {"A": item("minecraft:amethyst_shard"), "S": item("minecraft:soul_sand"),
-         "E": item("minecraft:ender_pearl")},
-        "minecraft:amethyst_shard",
-    )
-
-    shaped(
         "ember_heart",
         [" F ", "FGF", " F "],
         {"F": item("nightmare_core:nightmare_fragment"),

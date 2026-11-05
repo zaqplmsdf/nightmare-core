@@ -154,6 +154,7 @@
   "message.nightmare_core.ember_blade.no_core": "梦魇槽中没有可切断的梦魇之核。",
   "message.nightmare_core.nightmare.spawned": "床下传来了梦魇的呼吸。",
   "message.nightmare_core.blessing_bag.opened": "祝福袋中开出：%s",
+  "message.nightmare_core.starter_core": "你在床边发现了一枚梦魇之核。",
   "message.nightmare_core.insanity": "你已经七天没有合眼了。世界开始扭曲。",
   "message.nightmare_core.spawn_point.no_hostiles": "附近没有敌对生物，梦魇不允许你记住这里。",
 
@@ -170,6 +171,7 @@
   "nightmare_core.config.allow_player_kills": "允许 PvP 击杀",
   "nightmare_core.config.nightmare_core": "梦魇之核",
   "nightmare_core.config.keep_core_on_death": "死亡时保留核心",
+  "nightmare_core.config.give_core_on_first_sleep": "首次睡觉给予梦核",
   "nightmare_core.config.nightmares": "梦魇生物",
   "nightmare_core.config.sleep_spawn_chance": "入睡生成概率",
   "nightmare_core.config.blessing_bag_chance": "祝福袋掉落概率",

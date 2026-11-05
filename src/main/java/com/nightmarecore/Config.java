@@ -22,6 +22,7 @@ public final class Config {
     public static final ForgeConfigSpec.BooleanValue ALLOW_PASSIVE_MOBS;
     public static final ForgeConfigSpec.BooleanValue ALLOW_PLAYER_KILLS;
     public static final ForgeConfigSpec.BooleanValue KEEP_CORE_ON_DEATH;
+    public static final ForgeConfigSpec.BooleanValue GIVE_CORE_ON_FIRST_SLEEP;
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SPAWN_CHANCE_PERCENT;
     public static final ForgeConfigSpec.DoubleValue BLESSING_BAG_CHANCE_PERCENT;
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_HEALTH;
@@ -96,6 +97,11 @@ public final class Config {
                         "梦魇之核是进度钥匙，默认保留以避免意外死亡导致循环中断。")
                 .translation("nightmare_core.config.keep_core_on_death")
                 .define("keepCoreOnDeath", true);
+        GIVE_CORE_ON_FIRST_SLEEP = builder
+                .comment("玩家第一次睡觉时，是否在床边掉落一枚梦魇之核。",
+                        "关闭后不会自动给予，梦魇之核也不会再生成合成配方。")
+                .translation("nightmare_core.config.give_core_on_first_sleep")
+                .define("giveCoreOnFirstSleep", true);
         builder.pop();
 
         builder.push("nightmares");

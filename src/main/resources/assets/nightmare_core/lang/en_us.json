@@ -154,6 +154,7 @@
   "message.nightmare_core.ember_blade.no_core": "There is no Nightmare Core in the Nightmare slot to cut.",
   "message.nightmare_core.nightmare.spawned": "Something breathes beneath the bed.",
   "message.nightmare_core.blessing_bag.opened": "The blessing bag contains: %s",
+  "message.nightmare_core.starter_core": "You find a Nightmare Core beside the bed.",
   "message.nightmare_core.insanity": "You have not slept for seven days. The world begins to twist.",
   "message.nightmare_core.spawn_point.no_hostiles": "No hostile creatures are nearby. The nightmare will not let you remember this place.",
 
@@ -170,6 +171,7 @@
   "nightmare_core.config.allow_player_kills": "Allow PvP Kills",
   "nightmare_core.config.nightmare_core": "Nightmare Core",
   "nightmare_core.config.keep_core_on_death": "Keep Core on Death",
+  "nightmare_core.config.give_core_on_first_sleep": "Give Core on First Sleep",
   "nightmare_core.config.nightmares": "Nightmares",
   "nightmare_core.config.sleep_spawn_chance": "Sleep Spawn Chance",
   "nightmare_core.config.blessing_bag_chance": "Blessing Bag Chance",
