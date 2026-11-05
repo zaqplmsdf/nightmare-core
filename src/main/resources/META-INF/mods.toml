@@ -1,0 +1,38 @@
+modLoader = "javafml"
+loaderVersion = "[47,)"
+license = "${mod_license}"
+logoFile = "logo.png"
+
+[[mods]]
+modId = "${mod_id}"
+version = "${mod_version}"
+displayName = "${mod_name}"
+authors = "${mod_authors}"
+description = '''
+${mod_description}
+
+A custom curse mod for Minecraft 1.20.1 Forge modpacks.
+Requires Curios. The nightmare core is worn in the Nightmare slot, opens three
+Blessing slots, and turns kills and block breaks into nightmare fragment rolls.
+'''
+
+[[dependencies.${mod_id}]]
+modId = "forge"
+mandatory = true
+versionRange = "[47,)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "minecraft"
+mandatory = true
+versionRange = "[1.20.1,1.20.2)"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies.${mod_id}]]
+modId = "curios"
+mandatory = true
+versionRange = "[5.14.1,)"
+ordering = "AFTER"
+side = "BOTH"

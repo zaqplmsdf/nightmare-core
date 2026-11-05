@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FAF",
+    " F "
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    },
+    "A": {
+      "item": "minecraft:amethyst_shard"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:echo_bell"
+  }
+}

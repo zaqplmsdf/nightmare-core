@@ -1,0 +1,8 @@
+{
+  "order": 11,
+  "size": 0,
+  "icon": "nightmare_core:slot/blessing",
+  "validators": ["curios:tag"],
+  "render_toggle": false,
+  "add_cosmetic": false
+}

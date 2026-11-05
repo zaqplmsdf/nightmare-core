@@ -1,0 +1,30 @@
+pluginManagement {
+    repositories {
+        maven { url = 'https://maven.aliyun.com/repository/gradle-plugin' }
+        gradlePluginPortal()
+        maven { url = 'https://maven.minecraftforge.net/' }
+    }
+}
+
+dependencyResolutionManagement {
+    repositories {
+        // Mirrors first: Forge's CDN is often slow from mainland networks.
+        maven { url = 'https://maven.aliyun.com/repository/public' }
+        maven { url = 'https://repo.spongepowered.org/repository/maven-public/' }
+        maven { url = 'https://maven.minecraftforge.net/' }
+        mavenCentral()
+    }
+}
+
+rootProject.name = 'nightmare_core'
+
+// ForgeGradle's userdev plugin resolves Mojang's version JSON while applying the
+// plugin, before normal task inputs are considered. On some networks the Java
+// launchermeta request stalls indefinitely. Seed the pinned 1.20.1 metadata from
+// the repository so configuration never depends on that request.
+def mcMetaSource = new File(settingsDir, 'gradle/mcmeta-1.20.1.json')
+def mcMetaOutput = new File(settingsDir, 'build/downloadMCMeta/version.json')
+if (mcMetaSource.exists() && !mcMetaOutput.exists()) {
+    mcMetaOutput.parentFile.mkdirs()
+    mcMetaOutput.bytes = mcMetaSource.bytes
+}

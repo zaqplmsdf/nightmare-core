@@ -1,0 +1,1 @@
+7e783ad700cb96f6459e0f82a652f0a8e96ff185b332ce736ac7e636dbf3118f  nightmare_core-1.20.1-1.8.2.jar

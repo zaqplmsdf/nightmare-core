@@ -1,0 +1,22 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FCF",
+    " O "
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    },
+    "C": {
+      "item": "minecraft:compass"
+    },
+    "O": {
+      "item": "minecraft:obsidian"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:dream_anchor"
+  }
+}

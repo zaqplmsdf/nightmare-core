@@ -1,0 +1,8 @@
+{
+  "order": 10,
+  "size": 1,
+  "icon": "nightmare_core:slot/nightmare",
+  "validators": ["curios:tag"],
+  "render_toggle": false,
+  "add_cosmetic": false
+}

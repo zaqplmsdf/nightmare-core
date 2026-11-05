@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FRF",
+    " F "
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    },
+    "R": {
+      "item": "minecraft:feather"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:fleet_feather"
+  }
+}

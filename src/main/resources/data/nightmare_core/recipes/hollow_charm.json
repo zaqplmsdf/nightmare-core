@@ -1,0 +1,19 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    " F ",
+    "FMF",
+    " F "
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    },
+    "M": {
+      "item": "nightmare_core:hollow_shell"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:hollow_charm"
+  }
+}
