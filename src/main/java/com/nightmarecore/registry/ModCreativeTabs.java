@@ -38,6 +38,9 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.RIFT_EYE.get());
                         output.accept(ModItems.VIGIL_LANTERN.get());
                         output.accept(ModItems.HOLLOW_CHARM.get());
+                        output.accept(ModItems.ABYSSAL_CROWN.get());
+                        output.accept(ModItems.VOID_GAUNTLET.get());
+                        output.accept(ModItems.FATE_DICE.get());
                         output.accept(ModItems.NIGHTMARE_PRISM.get());
                         output.accept(ModItems.DREAM_ANCHOR.get());
                         output.accept(ModItems.EMBER_BLADE.get());

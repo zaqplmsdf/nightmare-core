@@ -71,6 +71,8 @@ public class AttributeBlessingItem extends Item implements ICurioItem {
     public boolean canEquip(SlotContext slotContext, ItemStack stack) {
         return CurioSlots.BLESSING.equals(slotContext.identifier())
                 && !slotContext.cosmetic()
+                && slotContext.entity() != null
+                && CurioUtil.hasNightmareCore(slotContext.entity())
                 && !CurioUtil.isDuplicateBlessing(slotContext, stack);
     }
 

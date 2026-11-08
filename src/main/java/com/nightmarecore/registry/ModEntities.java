@@ -44,7 +44,20 @@ public final class ModEntities {
     }
 
     public static NightmareEntity createRandom(net.minecraft.world.level.Level level, RandomSource random) {
-        EntityType<NightmareEntity> type = ALL.get(random.nextInt(ALL.size())).get();
+        // Eye 30, Skull 25, Shadow 20, Hand 20, Heart 5.
+        int roll = random.nextInt(100);
+        EntityType<NightmareEntity> type;
+        if (roll < 30) {
+            type = RIFT_NIGHTMARE.get();
+        } else if (roll < 55) {
+            type = ASHEN_NIGHTMARE.get();
+        } else if (roll < 75) {
+            type = VIGIL_NIGHTMARE.get();
+        } else if (roll < 95) {
+            type = HOLLOW_NIGHTMARE.get();
+        } else {
+            type = TIDAL_NIGHTMARE.get();
+        }
         return type.create(level);
     }
 

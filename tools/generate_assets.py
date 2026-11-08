@@ -341,6 +341,45 @@ def hollow_charm():
     return finish(im)
 
 
+def abyssal_crown():
+    im = canvas()
+    d = ImageDraw.Draw(im)
+    d.polygon([(2, 13), (3, 4), (6, 8), (8, 1), (10, 8), (13, 4), (15, 13)],
+              fill=(24, 18, 38, 255))
+    d.polygon([(3, 12), (4, 6), (6, 9), (8, 3), (10, 9), (12, 6), (13, 12)],
+              fill=(76, 35, 111, 255))
+    d.line([(4, 12), (13, 12)], fill=(205, 166, 76, 255))
+    d.point([(8, 1), (3, 4), (13, 4)], fill=(167, 104, 226, 255))
+    d.point([(6, 8), (10, 8), (8, 10)], fill=(236, 214, 139, 255))
+    return finish(im)
+
+
+def void_gauntlet():
+    im = canvas()
+    d = ImageDraw.Draw(im)
+    d.polygon([(4, 14), (3, 8), (5, 5), (8, 4), (10, 6), (12, 5), (14, 8),
+               (14, 13), (11, 15)], fill=(49, 34, 72, 255))
+    d.polygon([(5, 9), (7, 6), (9, 7), (11, 7), (13, 9), (12, 12), (8, 13)],
+              fill=(91, 58, 133, 255))
+    for x, y in [(6, 8), (9, 5), (12, 8), (10, 11), (7, 12)]:
+        d.point([(x, y)], fill=(202, 156, 255, 255))
+    d.line([(4, 15), (13, 15)], fill=(166, 121, 66, 255))
+    return finish(im)
+
+
+def fate_dice():
+    im = canvas()
+    d = ImageDraw.Draw(im)
+    d.polygon([(3, 5), (8, 2), (13, 5), (13, 12), (8, 15), (3, 12)],
+              fill=(223, 212, 187, 255))
+    d.polygon([(3, 5), (8, 8), (8, 15), (3, 12)], fill=(188, 174, 149, 255))
+    d.polygon([(8, 8), (13, 5), (13, 12), (8, 15)], fill=(244, 235, 214, 255))
+    for x, y in [(6, 7), (10, 8), (9, 11), (5, 10)]:
+        d.point([(x, y)], fill=(69, 39, 86, 255))
+    d.point([(8, 5), (4, 13)], fill=(148, 91, 214, 255))
+    return finish(im)
+
+
 ICONS = {
     "ember_heart": ember_heart,
     "dreamrend_fang": dreamrend_fang,
@@ -363,6 +402,9 @@ ICONS = {
     "rift_eye": rift_eye,
     "vigil_lantern": vigil_lantern,
     "hollow_charm": hollow_charm,
+    "abyssal_crown": abyssal_crown,
+    "void_gauntlet": void_gauntlet,
+    "fate_dice": fate_dice,
 }
 
 

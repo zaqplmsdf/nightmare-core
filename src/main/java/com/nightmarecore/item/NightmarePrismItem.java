@@ -1,5 +1,6 @@
 package com.nightmarecore.item;
 
+import com.nightmarecore.util.CurioUtil;
 import java.util.List;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.ChatFormatting;
@@ -43,6 +44,12 @@ public class NightmarePrismItem extends Item {
         }
         if (!(player instanceof ServerPlayer serverPlayer)) {
             return InteractionResultHolder.pass(stack);
+        }
+        if (!CurioUtil.hasNightmareCore(serverPlayer)) {
+            serverPlayer.displayClientMessage(
+                    Component.translatable("message.nightmare_core.requires_core")
+                            .withStyle(ChatFormatting.RED), true);
+            return InteractionResultHolder.fail(stack);
         }
         if (serverPlayer.getCooldowns().isOnCooldown(this)) {
             return InteractionResultHolder.fail(stack);
@@ -88,6 +95,8 @@ public class NightmarePrismItem extends Item {
     @Override
     public void appendHoverText(ItemStack stack, @Nullable Level level,
                                 List<Component> tooltip, TooltipFlag flag) {
+        tooltip.add(Component.translatable("tooltip.nightmare_core.requires_core")
+                .withStyle(ChatFormatting.DARK_RED));
         tooltip.add(Component.translatable("tooltip.nightmare_core.prism.use")
                 .withStyle(ChatFormatting.GRAY));
         tooltip.add(Component.translatable("tooltip.nightmare_core.prism.cooldown")

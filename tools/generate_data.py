@@ -24,6 +24,15 @@ def shaped(recipe_id, pattern, key, unlock_item):
     write_recipe(recipe_id, recipe, unlock_item)
 
 
+def shapeless(recipe_id, ingredients, unlock_item):
+    recipe = {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [item(value) for value in ingredients],
+        "result": {"item": f"nightmare_core:{recipe_id}"},
+    }
+    write_recipe(recipe_id, recipe, unlock_item)
+
+
 def write_recipe(recipe_id, recipe, unlock_item):
     path = RECIPES / f"{recipe_id}.json"
     path.write_text(json.dumps(recipe, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
@@ -142,6 +151,30 @@ def main():
              "M": item(material)},
             "nightmare_core:nightmare_fragment",
         )
+
+    f = "nightmare_core:nightmare_fragment"
+    n = "minecraft:nether_star"
+    shapeless(
+        "abyssal_crown",
+        [f, f, f, f,
+         "nightmare_core:ashen_cinder", "nightmare_core:ashen_cinder",
+         "nightmare_core:tidal_tear", "nightmare_core:tidal_tear", n],
+        f,
+    )
+    shapeless(
+        "void_gauntlet",
+        [f, f, f, f,
+         "nightmare_core:rift_shard", "nightmare_core:rift_shard",
+         "nightmare_core:hollow_shell", "nightmare_core:hollow_shell", n],
+        f,
+    )
+    shapeless(
+        "fate_dice",
+        [f, f, f, f,
+         "nightmare_core:vigil_eye", "nightmare_core:vigil_eye",
+         "nightmare_core:hollow_shell", "nightmare_core:hollow_shell", n],
+        f,
+    )
 
     print(f"Generated {len(list(RECIPES.glob('*.json')))} recipes and "
           f"{len(list(ADVANCEMENTS.glob('*.json')))} recipe advancements.")

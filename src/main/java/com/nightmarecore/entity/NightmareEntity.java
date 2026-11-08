@@ -1,14 +1,20 @@
 package com.nightmarecore.entity;
 
 import com.nightmarecore.Config;
+import com.nightmarecore.registry.ModEntities;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 
@@ -34,12 +40,23 @@ public class NightmareEntity extends Zombie {
 
         var health = this.getAttribute(Attributes.MAX_HEALTH);
         if (health != null) {
-            health.setBaseValue(Config.NIGHTMARE_HEALTH.get());
-            this.setHealth((float) (double) Config.NIGHTMARE_HEALTH.get());
+            double healthValue = Config.NIGHTMARE_HEALTH.get();
+            if (isSkull()) {
+                healthValue *= 1.6D;
+            }
+            health.setBaseValue(healthValue);
+            this.setHealth((float) healthValue);
         }
         var speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speed != null) {
-            speed.setBaseValue(Config.NIGHTMARE_SPEED.get());
+            double speedValue = Config.NIGHTMARE_SPEED.get();
+            if (isShadow()) {
+                speedValue *= 1.5D;
+            }
+            if (isHeart()) {
+                speedValue = 0.0D;
+            }
+            speed.setBaseValue(speedValue);
         }
         var follow = this.getAttribute(Attributes.FOLLOW_RANGE);
         if (follow != null) {
@@ -51,8 +68,32 @@ public class NightmareEntity extends Zombie {
         }
         var damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (damage != null) {
-            damage.setBaseValue(damageFor(level.getDifficulty()));
+            double damageValue = damageFor(level.getDifficulty());
+            if (isSkull()) {
+                damageValue *= 0.7D;
+            }
+            damage.setBaseValue(damageValue);
         }
+    }
+
+    private boolean isEye() {
+        return this.getType() == ModEntities.RIFT_NIGHTMARE.get();
+    }
+
+    private boolean isSkull() {
+        return this.getType() == ModEntities.ASHEN_NIGHTMARE.get();
+    }
+
+    private boolean isHeart() {
+        return this.getType() == ModEntities.TIDAL_NIGHTMARE.get();
+    }
+
+    private boolean isShadow() {
+        return this.getType() == ModEntities.VIGIL_NIGHTMARE.get();
+    }
+
+    private boolean isHand() {
+        return this.getType() == ModEntities.HOLLOW_NIGHTMARE.get();
     }
 
     public static float damageFor(Difficulty difficulty) {
@@ -87,6 +128,40 @@ public class NightmareEntity extends Zombie {
                     this.getX(), this.getY() + this.getBbHeight() * 0.5D, this.getZ(),
                     1, 0.25D, 0.35D, 0.25D, 0.0D);
         }
+
+        if (isEye() && this.tickCount % 30 == 0) {
+            LivingEntity target = this.getTarget();
+            if (target != null && target.isAlive()
+                    && this.distanceToSqr(target) > 16.0D
+                    && this.distanceToSqr(target) < 400.0D
+                    && this.hasLineOfSight(target)) {
+                this.rangedAttack(target);
+            }
+        }
+    }
+
+    private void rangedAttack(LivingEntity target) {
+        Arrow arrow = new Arrow(this.level(), this);
+        arrow.setOwner(this);
+        arrow.setBaseDamage(damageFor(this.level().getDifficulty()));
+        double dx = target.getX() - this.getX();
+        double dy = target.getEyeY() - arrow.getY();
+        double dz = target.getZ() - this.getZ();
+        arrow.shoot(dx, dy, dz, 1.6F, 0.05F);
+        this.level().addFreshEntity(arrow);
+        this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                net.minecraft.sounds.SoundEvents.ARROW_SHOOT,
+                net.minecraft.sounds.SoundSource.HOSTILE, 0.8F, 1.1F);
+    }
+
+    @Override
+    public boolean doHurtTarget(Entity target) {
+        boolean hit = super.doHurtTarget(target);
+        if (hit && isHand() && target instanceof LivingEntity living) {
+            var effect = this.getRandom().nextBoolean() ? MobEffects.POISON : MobEffects.WITHER;
+            living.addEffect(new MobEffectInstance(effect, 100, 0));
+        }
+        return hit;
     }
 
     private boolean isInSunlight() {

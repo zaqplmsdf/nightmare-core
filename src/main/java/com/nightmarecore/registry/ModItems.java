@@ -7,6 +7,7 @@ import com.nightmarecore.item.BlessingItem;
 import com.nightmarecore.item.DreamAnchorItem;
 import com.nightmarecore.item.DreamhunterEyeItem;
 import com.nightmarecore.item.EmberBladeItem;
+import com.nightmarecore.item.FateDiceItem;
 import com.nightmarecore.item.NightmareCoreItem;
 import com.nightmarecore.item.NightmareFragmentItem;
 import com.nightmarecore.item.NightmareMaterialItem;
@@ -68,6 +69,17 @@ public final class ModItems {
             List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 2.0D),
                     new AttributeBlessingItem.AttributeBonus(Attributes.KNOCKBACK_RESISTANCE, 0.5D)),
             List.of());
+    public static final RegistryObject<Item> ABYSSAL_CROWN = specialBlessing("abyssal_crown",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ARMOR, 6.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.ARMOR_TOUGHNESS, 3.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.MAX_HEALTH, 8.0D)),
+            List.of(MobEffects.DAMAGE_RESISTANCE));
+    public static final RegistryObject<Item> VOID_GAUNTLET = specialBlessing("void_gauntlet",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 5.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_SPEED, 0.8D)),
+            List.of(MobEffects.DAMAGE_BOOST));
+    public static final RegistryObject<Item> FATE_DICE = register("fate_dice",
+            () -> new FateDiceItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
     public static final RegistryObject<Item> NIGHTMARE_PRISM = register("nightmare_prism",
             () -> new NightmarePrismItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
