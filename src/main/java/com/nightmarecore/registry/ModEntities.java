@@ -1,5 +1,6 @@
 package com.nightmarecore.registry;
 
+import com.nightmarecore.Config;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.entity.NightmareEntity;
 import java.util.List;
@@ -44,16 +45,25 @@ public final class ModEntities {
     }
 
     public static NightmareEntity createRandom(net.minecraft.world.level.Level level, RandomSource random) {
-        // Eye 30, Skull 25, Shadow 20, Hand 20, Heart 5.
-        int roll = random.nextInt(100);
+        int eye = Math.max(0, Config.EYE.spawnWeight().get());
+        int skull = Math.max(0, Config.SKULL.spawnWeight().get());
+        int shadow = Math.max(0, Config.SHADOW.spawnWeight().get());
+        int hand = Math.max(0, Config.HAND.spawnWeight().get());
+        int heart = Math.max(0, Config.HEART.spawnWeight().get());
+        int total = eye + skull + shadow + hand + heart;
+        if (total <= 0) {
+            return null;
+        }
+
+        int roll = random.nextInt(total);
         EntityType<NightmareEntity> type;
-        if (roll < 30) {
+        if (roll < eye) {
             type = RIFT_NIGHTMARE.get();
-        } else if (roll < 55) {
+        } else if ((roll -= eye) < skull) {
             type = ASHEN_NIGHTMARE.get();
-        } else if (roll < 75) {
+        } else if ((roll -= skull) < shadow) {
             type = VIGIL_NIGHTMARE.get();
-        } else if (roll < 95) {
+        } else if ((roll -= shadow) < hand) {
             type = HOLLOW_NIGHTMARE.get();
         } else {
             type = TIDAL_NIGHTMARE.get();

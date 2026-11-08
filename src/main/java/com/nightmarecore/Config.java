@@ -25,14 +25,18 @@ public final class Config {
     public static final ForgeConfigSpec.BooleanValue GIVE_CORE_ON_FIRST_SLEEP;
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SPAWN_CHANCE_PERCENT;
     public static final ForgeConfigSpec.DoubleValue BLESSING_BAG_CHANCE_PERCENT;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_HEALTH;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_ATTACK_EASY;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_ATTACK_NORMAL;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_ATTACK_HARD;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SPEED;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_FOLLOW_RANGE;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_ARMOR;
-    public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SUNLIGHT_DAMAGE_PERCENT;
+
+    public static final VariantStats EYE;
+    public static final VariantStats SKULL;
+    public static final VariantStats SHADOW;
+    public static final VariantStats HEART;
+    public static final VariantStats HAND;
+
+    public static final ForgeConfigSpec.DoubleValue EYE_RANGED_DISTANCE;
+    public static final ForgeConfigSpec.IntValue EYE_RANGED_COOLDOWN_TICKS;
+    public static final ForgeConfigSpec.DoubleValue SHADOW_DAMAGE_REDUCTION_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue HEART_AURA_RADIUS;
+    public static final ForgeConfigSpec.IntValue HAND_EFFECT_DURATION_TICKS;
 
     public static final ForgeConfigSpec.DoubleValue CURSE_HEALTH_CAP_DEFAULT_PERCENT;
     public static final ForgeConfigSpec.IntValue CURSE_HEALTH_CAP_LEVELS_PER_STEP;
@@ -129,38 +133,37 @@ public final class Config {
                 .translation("nightmare_core.config.blessing_bag_chance")
                 .defineInRange("blessingBagChancePercent", 10.0D, 0.0D, 100.0D);
 
-        NIGHTMARE_HEALTH = builder
-                .comment("梦魇最大生命值。默认 20，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_health")
-                .defineInRange("health", 20.0D, 1.0D, 1024.0D);
-        NIGHTMARE_ATTACK_EASY = builder
-                .comment("简单难度下梦魇的攻击伤害。默认 3，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_attack_easy")
-                .defineInRange("attackDamageEasy", 3.0D, 0.0D, 2048.0D);
-        NIGHTMARE_ATTACK_NORMAL = builder
-                .comment("普通难度下梦魇的攻击伤害。默认 3，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_attack_normal")
-                .defineInRange("attackDamageNormal", 3.0D, 0.0D, 2048.0D);
-        NIGHTMARE_ATTACK_HARD = builder
-                .comment("困难难度下梦魇的攻击伤害。默认 3，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_attack_hard")
-                .defineInRange("attackDamageHard", 3.0D, 0.0D, 2048.0D);
-        NIGHTMARE_SPEED = builder
-                .comment("梦魇移动速度属性。默认 0.23，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_speed")
-                .defineInRange("movementSpeed", 0.23D, 0.0D, 10.0D);
-        NIGHTMARE_FOLLOW_RANGE = builder
-                .comment("梦魇跟随范围。默认 35，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_follow_range")
-                .defineInRange("followRange", 35.0D, 1.0D, 128.0D);
-        NIGHTMARE_ARMOR = builder
-                .comment("梦魇护甲值。默认 2，与原版僵尸一致。")
-                .translation("nightmare_core.config.nightmare_armor")
-                .defineInRange("armor", 2.0D, 0.0D, 30.0D);
-        NIGHTMARE_SUNLIGHT_DAMAGE_PERCENT = builder
-                .comment("梦魇暴露在阳光下时，每秒损失的最大生命值百分比。")
-                .translation("nightmare_core.config.sunlight_damage_percent")
-                .defineInRange("sunlightDamagePercent", 30.0D, 0.0D, 100.0D);
+        EYE = defineVariant(builder, "eye", "梦魇之眸",
+                20.0D, 3.0D, 3.0D, 3.0D, 0.23D, 35.0D, 2.0D, 30, 30.0D);
+        SKULL = defineVariant(builder, "skull", "梦魇之颅",
+                32.0D, 2.1D, 2.1D, 2.1D, 0.23D, 35.0D, 2.0D, 25, 30.0D);
+        SHADOW = defineVariant(builder, "shadow", "梦魇之影",
+                20.0D, 3.0D, 3.0D, 3.0D, 0.345D, 35.0D, 2.0D, 20, 30.0D);
+        HEART = defineVariant(builder, "heart", "梦魇之心",
+                20.0D, 3.0D, 3.0D, 3.0D, 0.0D, 35.0D, 2.0D, 5, 30.0D);
+        HAND = defineVariant(builder, "hand", "梦魇之手",
+                20.0D, 3.0D, 3.0D, 3.0D, 0.23D, 35.0D, 2.0D, 20, 30.0D);
+
+        EYE_RANGED_DISTANCE = builder
+                .comment("梦魇之眸开始远程射击的最小距离（格）。")
+                .translation("nightmare_core.config.nightmares.eye.ranged_distance")
+                .defineInRange("eyeRangedDistance", 4.0D, 1.0D, 64.0D);
+        EYE_RANGED_COOLDOWN_TICKS = builder
+                .comment("梦魇之眸两次远程射击的间隔（tick）。")
+                .translation("nightmare_core.config.nightmares.eye.ranged_cooldown")
+                .defineInRange("eyeRangedCooldownTicks", 30, 5, 1200);
+        SHADOW_DAMAGE_REDUCTION_PERCENT = builder
+                .comment("梦魇之影受到无附魔武器攻击时的减伤比例（百分比）。")
+                .translation("nightmare_core.config.nightmares.shadow.damage_reduction")
+                .defineInRange("shadowDamageReductionPercent", 40.0D, 0.0D, 100.0D);
+        HEART_AURA_RADIUS = builder
+                .comment("梦魇之心保护周围梦魇的半径（格）。")
+                .translation("nightmare_core.config.nightmares.heart.aura_radius")
+                .defineInRange("heartAuraRadius", 16.0D, 0.0D, 64.0D);
+        HAND_EFFECT_DURATION_TICKS = builder
+                .comment("梦魇之手附加中毒/凋灵的持续时间（tick）。")
+                .translation("nightmare_core.config.nightmares.hand.effect_duration")
+                .defineInRange("handEffectDurationTicks", 100, 1, 1200);
         builder.pop();
 
         builder.push("curses");
@@ -236,6 +239,69 @@ public final class Config {
         builder.pop();
 
         SPEC = builder.build();
+    }
+
+    private static VariantStats defineVariant(
+            ForgeConfigSpec.Builder builder, String id, String name,
+            double health, double easy, double normal, double hard,
+            double speed, double followRange, double armor, int spawnWeight,
+            double sunlightPercent) {
+        builder.push(id);
+        builder.comment(name + "的专属属性与生成权重。");
+        builder.translation("nightmare_core.config.nightmares." + id);
+
+        ForgeConfigSpec.DoubleValue healthValue = builder
+                .comment("最大生命值。")
+                .translation("nightmare_core.config.nightmares." + id + ".health")
+                .defineInRange("health", health, 1.0D, 1024.0D);
+        ForgeConfigSpec.DoubleValue easyValue = builder
+                .comment("简单难度攻击伤害。")
+                .translation("nightmare_core.config.nightmares." + id + ".attack_easy")
+                .defineInRange("attackDamageEasy", easy, 0.0D, 2048.0D);
+        ForgeConfigSpec.DoubleValue normalValue = builder
+                .comment("普通难度攻击伤害。")
+                .translation("nightmare_core.config.nightmares." + id + ".attack_normal")
+                .defineInRange("attackDamageNormal", normal, 0.0D, 2048.0D);
+        ForgeConfigSpec.DoubleValue hardValue = builder
+                .comment("困难难度攻击伤害。")
+                .translation("nightmare_core.config.nightmares." + id + ".attack_hard")
+                .defineInRange("attackDamageHard", hard, 0.0D, 2048.0D);
+        ForgeConfigSpec.DoubleValue speedValue = builder
+                .comment("移动速度属性。")
+                .translation("nightmare_core.config.nightmares." + id + ".speed")
+                .defineInRange("movementSpeed", speed, 0.0D, 10.0D);
+        ForgeConfigSpec.DoubleValue followValue = builder
+                .comment("跟随范围。")
+                .translation("nightmare_core.config.nightmares." + id + ".follow_range")
+                .defineInRange("followRange", followRange, 1.0D, 128.0D);
+        ForgeConfigSpec.DoubleValue armorValue = builder
+                .comment("护甲值。")
+                .translation("nightmare_core.config.nightmares." + id + ".armor")
+                .defineInRange("armor", armor, 0.0D, 30.0D);
+        ForgeConfigSpec.IntValue weightValue = builder
+                .comment("生成权重；0 表示不会自然生成。")
+                .translation("nightmare_core.config.nightmares." + id + ".spawn_weight")
+                .defineInRange("spawnWeight", spawnWeight, 0, 1000);
+        ForgeConfigSpec.DoubleValue sunlightValue = builder
+                .comment("阳光每秒损失的最大生命值百分比。")
+                .translation("nightmare_core.config.nightmares." + id + ".sunlight")
+                .defineInRange("sunlightDamagePercent", sunlightPercent, 0.0D, 100.0D);
+        builder.pop();
+
+        return new VariantStats(healthValue, easyValue, normalValue, hardValue,
+                speedValue, followValue, armorValue, weightValue, sunlightValue);
+    }
+
+    public record VariantStats(
+            ForgeConfigSpec.DoubleValue health,
+            ForgeConfigSpec.DoubleValue attackEasy,
+            ForgeConfigSpec.DoubleValue attackNormal,
+            ForgeConfigSpec.DoubleValue attackHard,
+            ForgeConfigSpec.DoubleValue movementSpeed,
+            ForgeConfigSpec.DoubleValue followRange,
+            ForgeConfigSpec.DoubleValue armor,
+            ForgeConfigSpec.IntValue spawnWeight,
+            ForgeConfigSpec.DoubleValue sunlightPercent) {
     }
 
     private Config() {

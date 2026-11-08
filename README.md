@@ -6,7 +6,7 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.4**：加入三件强力数值/机制赐福；五种梦魇改为独立行为（远程/高血/高移速/光环/毒伤）；未佩戴梦核时无法使用本模组工具和饰品（余烬之刃除外）。
+> **0.8.5**：为五种梦魇分别添加独立属性/权重配置；梦魇之眸远程参数、梦魇之影减伤、梦魇之心光环半径、梦魇之手效果时长均可单独调整。
 
 
 
@@ -23,7 +23,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.4.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.5.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
 
@@ -329,14 +329,28 @@ Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。�
 | `nightmare_core.giveCoreOnFirstSleep` | true | 第一次睡觉时在床边给予梦核 |
 | `nightmares.sleepSpawnChancePercent` | 10.0 | 佩戴核心入睡时生成梦魇的概率 |
 | `nightmares.blessingBagChancePercent` | 10.0 | 梦魇掉落祝福袋的概率 |
-| `nightmares.health` | 20.0 | 梦魇最大生命值（默认僵尸） |
-| `nightmares.attackDamageEasy` | 3.0 | 简单难度攻击伤害（默认僵尸） |
-| `nightmares.attackDamageNormal` | 3.0 | 普通难度攻击伤害（默认僵尸） |
-| `nightmares.attackDamageHard` | 3.0 | 困难难度攻击伤害（默认僵尸） |
-| `nightmares.movementSpeed` | 0.23 | 移动速度属性（默认僵尸） |
-| `nightmares.followRange` | 35.0 | 跟随范围（默认僵尸） |
-| `nightmares.armor` | 2.0 | 护甲（默认僵尸） |
-| `nightmares.sunlightDamagePercent` | 30.0 | 阳光每秒损失的最大生命值百分比 |
+
+每个梦魇在 `[nightmares.<id>]` 下有独立配置：
+
+| 段 | 生命 | 伤害（简单/普通/困难） | 移速 | 跟随 | 护甲 | 权重 | 阳光伤害 |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
+| `nightmares.eye` | 20 | 3 / 3 / 3 | 0.23 | 35 | 2 | 30 | 30% |
+| `nightmares.skull` | 32 | 2.1 / 2.1 / 2.1 | 0.23 | 35 | 2 | 25 | 30% |
+| `nightmares.shadow` | 20 | 3 / 3 / 3 | 0.345 | 35 | 2 | 20 | 30% |
+| `nightmares.heart` | 20 | 3 / 3 / 3 | 0.0 | 35 | 2 | 5 | 30% |
+| `nightmares.hand` | 20 | 3 / 3 / 3 | 0.23 | 35 | 2 | 20 | 30% |
+
+每个变体共用字段：`health`、`attackDamageEasy`、`attackDamageNormal`、`attackDamageHard`、`movementSpeed`、`followRange`、`armor`、`spawnWeight`、`sunlightDamagePercent`。
+
+额外机制配置：
+
+| 配置项 | 默认 | 说明 |
+| --- | ---: | --- |
+| `nightmares.eyeRangedDistance` | 4.0 | 梦魇之眸远程射击最小距离 |
+| `nightmares.eyeRangedCooldownTicks` | 30 | 梦魇之眸远程射击间隔 |
+| `nightmares.shadowDamageReductionPercent` | 40.0 | 梦魇之影对无附魔武器的减伤 |
+| `nightmares.heartAuraRadius` | 16.0 | 梦魇之心保护周围梦魇的半径 |
+| `nightmares.handEffectDurationTicks` | 100 | 梦魇之手中毒/凋灵持续时间 |
 | `curses.health_cap.defaultPercent` | 10.0 | 第2诅咒：0 级生命回复上限（%） |
 | `curses.health_cap.levelsPerIncrement` | 20 | 第2诅咒：每多少级提升一次 |
 | `curses.health_cap.incrementPercent` | 10.0 | 第2诅咒：每次提升的上限（%） |
@@ -398,12 +412,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.4.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.5.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-d21c36acc4775b4df34d6685045e953d99c832da1f76616675f899864bc1fbc9  nightmare_core-1.20.1-0.8.4.jar
+dec7a07454b1b239afb0a468ecba1c5819c6526d7a5807e86768faf73cbdaeba  nightmare_core-1.20.1-0.8.5.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
@@ -430,7 +444,8 @@ d21c36acc4775b4df34d6685045e953d99c832da1f76616675f899864bc1fbc9  nightmare_core
 - **首次睡觉测试**：首次触发掉落 1 枚梦核（`first=1`），第二次不再掉落（`second=1`），持久化标记为 `true`。
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **18 个配方**。
 - **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
-- 0.8.4 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
+- 0.8.5 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。

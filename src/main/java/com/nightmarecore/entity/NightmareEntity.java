@@ -40,40 +40,42 @@ public class NightmareEntity extends Zombie {
 
         var health = this.getAttribute(Attributes.MAX_HEALTH);
         if (health != null) {
-            double healthValue = Config.NIGHTMARE_HEALTH.get();
-            if (isSkull()) {
-                healthValue *= 1.6D;
-            }
+            double healthValue = stats().health().get();
             health.setBaseValue(healthValue);
             this.setHealth((float) healthValue);
         }
         var speed = this.getAttribute(Attributes.MOVEMENT_SPEED);
         if (speed != null) {
-            double speedValue = Config.NIGHTMARE_SPEED.get();
-            if (isShadow()) {
-                speedValue *= 1.5D;
-            }
-            if (isHeart()) {
-                speedValue = 0.0D;
-            }
-            speed.setBaseValue(speedValue);
+            speed.setBaseValue(stats().movementSpeed().get());
         }
         var follow = this.getAttribute(Attributes.FOLLOW_RANGE);
         if (follow != null) {
-            follow.setBaseValue(Config.NIGHTMARE_FOLLOW_RANGE.get());
+            follow.setBaseValue(stats().followRange().get());
         }
         var armor = this.getAttribute(Attributes.ARMOR);
         if (armor != null) {
-            armor.setBaseValue(Config.NIGHTMARE_ARMOR.get());
+            armor.setBaseValue(stats().armor().get());
         }
         var damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (damage != null) {
-            double damageValue = damageFor(level.getDifficulty());
-            if (isSkull()) {
-                damageValue *= 0.7D;
-            }
-            damage.setBaseValue(damageValue);
+            damage.setBaseValue(damageFor(level.getDifficulty()));
         }
+    }
+
+    public Config.VariantStats stats() {
+        if (isEye()) {
+            return Config.EYE;
+        }
+        if (isSkull()) {
+            return Config.SKULL;
+        }
+        if (isHeart()) {
+            return Config.HEART;
+        }
+        if (isShadow()) {
+            return Config.SHADOW;
+        }
+        return Config.HAND;
     }
 
     private boolean isEye() {
@@ -96,11 +98,11 @@ public class NightmareEntity extends Zombie {
         return this.getType() == ModEntities.HOLLOW_NIGHTMARE.get();
     }
 
-    public static float damageFor(Difficulty difficulty) {
+    public float damageFor(Difficulty difficulty) {
         return switch (difficulty) {
-            case EASY -> (float) (double) Config.NIGHTMARE_ATTACK_EASY.get();
-            case NORMAL -> (float) (double) Config.NIGHTMARE_ATTACK_NORMAL.get();
-            case HARD -> (float) (double) Config.NIGHTMARE_ATTACK_HARD.get();
+            case EASY -> (float) (double) stats().attackEasy().get();
+            case NORMAL -> (float) (double) stats().attackNormal().get();
+            case HARD -> (float) (double) stats().attackHard().get();
             default -> 0.0F;
         };
     }
@@ -114,7 +116,7 @@ public class NightmareEntity extends Zombie {
 
         ServerLevel serverLevel = (ServerLevel) this.level();
         if (this.tickCount % 20 == 0 && isInSunlight()) {
-            float percent = (float) (double) Config.NIGHTMARE_SUNLIGHT_DAMAGE_PERCENT.get() / 100.0F;
+            float percent = (float) (double) stats().sunlightPercent().get() / 100.0F;
             float damage = this.getMaxHealth() * percent;
             if (damage > 0.0F) {
                 this.invulnerableTime = 0;
@@ -129,10 +131,12 @@ public class NightmareEntity extends Zombie {
                     1, 0.25D, 0.35D, 0.25D, 0.0D);
         }
 
-        if (isEye() && this.tickCount % 30 == 0) {
+        int rangedCooldown = Math.max(5, Config.EYE_RANGED_COOLDOWN_TICKS.get());
+        if (isEye() && this.tickCount % rangedCooldown == 0) {
             LivingEntity target = this.getTarget();
+            double minDistance = Config.EYE_RANGED_DISTANCE.get();
             if (target != null && target.isAlive()
-                    && this.distanceToSqr(target) > 16.0D
+                    && this.distanceToSqr(target) > minDistance * minDistance
                     && this.distanceToSqr(target) < 400.0D
                     && this.hasLineOfSight(target)) {
                 this.rangedAttack(target);
@@ -159,7 +163,7 @@ public class NightmareEntity extends Zombie {
         boolean hit = super.doHurtTarget(target);
         if (hit && isHand() && target instanceof LivingEntity living) {
             var effect = this.getRandom().nextBoolean() ? MobEffects.POISON : MobEffects.WITHER;
-            living.addEffect(new MobEffectInstance(effect, 100, 0));
+            living.addEffect(new MobEffectInstance(effect, Config.HAND_EFFECT_DURATION_TICKS.get(), 0));
         }
         return hit;
     }

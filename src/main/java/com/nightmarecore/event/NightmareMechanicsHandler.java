@@ -1,5 +1,6 @@
 package com.nightmarecore.event;
 
+import com.nightmarecore.Config;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.entity.NightmareEntity;
 import com.nightmarecore.registry.ModEntities;
@@ -17,9 +18,6 @@ import net.minecraftforge.fml.common.Mod;
  */
 @Mod.EventBusSubscriber(modid = NightmareCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class NightmareMechanicsHandler {
-
-    private static final double HEART_AURA_RADIUS = 16.0D;
-
     @SubscribeEvent(priority = EventPriority.HIGHEST)
     public static void onLivingHurt(LivingHurtEvent event) {
         if (event.isCanceled() || !(event.getEntity() instanceof NightmareEntity victim)) {
@@ -39,15 +37,17 @@ public final class NightmareMechanicsHandler {
             if (source instanceof Player player) {
                 ItemStack weapon = player.getMainHandItem();
                 if (!weapon.isEmpty() && !weapon.isEnchanted()) {
-                    event.setAmount(event.getAmount() * 0.6F);
+                    float factor = 1.0F - (float) (double) Config.SHADOW_DAMAGE_REDUCTION_PERCENT.get() / 100.0F;
+                    event.setAmount(event.getAmount() * factor);
                 }
             }
         }
     }
 
     private static boolean hasHeartNearby(NightmareEntity victim) {
+        double radius = Config.HEART_AURA_RADIUS.get();
         return victim.level().getEntitiesOfClass(NightmareEntity.class,
-                        victim.getBoundingBox().inflate(HEART_AURA_RADIUS),
+                        victim.getBoundingBox().inflate(radius),
                         entity -> entity.getType() == ModEntities.TIDAL_NIGHTMARE.get()
                                 && entity.isAlive())
                 .stream()
