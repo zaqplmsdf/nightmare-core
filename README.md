@@ -6,7 +6,8 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.2**：移除梦魇之核合成配方；玩家第一次睡觉时在床边掉落梦核（可配置关闭）。当前版本包含七重诅咒、赐福压制、梦魇之眸模型与五组动画、五种梦魇刷怪蛋、专属材料与五件属性/功能赐福。
+> **0.8.3**：修正 GitHub Release 中文描述；为第 2、3、4、6、7 项诅咒添加可配置参数。
+
 
 ![items](design/contact_sheet.png)
 
@@ -21,7 +22,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.2.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.3.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
 
@@ -62,6 +63,8 @@ Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。�
 ## 七重诅咒
 
 七重诅咒在核心佩戴期间同时生效，取下核心后全部停止。**每件赐福可以压制一项诅咒**，但只有三个赐福槽，因此最多同时压制三项。
+
+> 以下数值为默认值。第 2、3、4、6、7 项诅咒可在 `config/nightmare_core-common.toml` 的 `curses.*` 中调整；第 1、5 项没有额外配置。
 
 | # | 诅咒 | 效果 | 压制赐福 |
 | ---: | --- | --- | --- |
@@ -317,6 +320,16 @@ Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。�
 | `nightmares.followRange` | 35.0 | 跟随范围（默认僵尸） |
 | `nightmares.armor` | 2.0 | 护甲（默认僵尸） |
 | `nightmares.sunlightDamagePercent` | 30.0 | 阳光每秒损失的最大生命值百分比 |
+| `curses.health_cap.defaultPercent` | 10.0 | 第2诅咒：0 级生命回复上限（%） |
+| `curses.health_cap.levelsPerIncrement` | 20 | 第2诅咒：每多少级提升一次 |
+| `curses.health_cap.incrementPercent` | 10.0 | 第2诅咒：每次提升的上限（%） |
+| `curses.health_cap.maxPercent` | 90.0 | 第2诅咒：最高回复上限（%） |
+| `curses.damage.threshold` | 5.0 | 第3诅咒：伤害阈值 |
+| `curses.damage.reductionPercent` | 20.0 | 第3诅咒：超过阈值后的削减比例（%） |
+| `curses.spawn_point.hostileRadius` | 16.0 | 第4诅咒：敌对生物检测范围（格） |
+| `curses.darkness.triggerSeconds` | 5.0 | 第6诅咒：低亮度触发时间（秒） |
+| `curses.darkness.damagePercentPerSecond` | 20.0 | 第6诅咒：触发后每秒伤害（最大生命值%） |
+| `curses.insanity.days` | 7.0 | 第7诅咒：多少天不睡触发精神失常 |
 
 1.1.0 起，TOML 内的描述均使用中文；同时在 `zh_cn.json` / `en_us.json` 中提供了 `nightmare_core.config.*` 翻译键，供配置界面类模组读取。
 
@@ -368,12 +381,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.2.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.3.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-8e9f3e5d34a77be69bc0675cfee316d65d1f36999957bee444a648ba68bec575  nightmare_core-1.20.1-0.8.2.jar
+ceadba7cda48d8f3bdf2ce2fdcea6e67ce88e65840d0bb3878cce4e610eeb0fd  nightmare_core-1.20.1-0.8.3.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
@@ -397,7 +410,8 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **掉落修复测试**：用刷怪蛋/召唤生成的裂隙梦魇被击杀后掉落 2 个梦魇碎片 + 2 个裂隙碎片，掉落事件正常。
 - **首次睡觉测试**：首次触发掉落 1 枚梦核（`first=1`），第二次不再掉落（`second=1`），持久化标记为 `true`。
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **15 个配方**。
-- 0.8.2 打包了 **15 个配方**和对应的 15 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
+- 0.8.3 打包了 **15 个配方**和对应的 15 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。

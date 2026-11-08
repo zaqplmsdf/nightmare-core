@@ -1,5 +1,6 @@
 package com.nightmarecore.event;
 
+import com.nightmarecore.Config;
 import com.nightmarecore.CurseType;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.registry.ModEffects;
@@ -35,10 +36,7 @@ public final class CurseEventHandler {
 
     public static final String LAST_SLEEP_TAG = "nightmare_core:last_sleep";
 
-    private static final int DARK_DELAY_TICKS = 100;
     private static final int DARK_INTERVAL_TICKS = 20;
-    private static final long INSANITY_TICKS = 7L * 24000L;
-    private static final double HOSTILE_RADIUS = 16.0D;
 
     private static final Map<UUID, Integer> DARK_TICKS = new HashMap<>();
 
@@ -81,7 +79,8 @@ public final class CurseEventHandler {
         }
 
         int ticks = DARK_TICKS.merge(uuid, 1, Integer::sum);
-        if (ticks >= DARK_DELAY_TICKS && (ticks - DARK_DELAY_TICKS) % DARK_INTERVAL_TICKS == 0) {
+        int triggerTicks = Math.max(1, (int) Math.round(Config.CURSE_DARKNESS_TRIGGER_SECONDS.get() * 20.0D));
+        if (ticks >= triggerTicks && (ticks - triggerTicks) % DARK_INTERVAL_TICKS == 0) {
             damageFromDarkness(player);
         }
     }
@@ -91,7 +90,8 @@ public final class CurseEventHandler {
     }
 
     private static void damageFromDarkness(ServerPlayer player) {
-        float damage = (float) Math.ceil(player.getMaxHealth() * 0.20D);
+        float percent = (float) (double) Config.CURSE_DARKNESS_DAMAGE_PERCENT.get() / 100.0F;
+        float damage = (float) Math.ceil(player.getMaxHealth() * percent);
         if (player.getHealth() <= 1.0F) {
             return;
         }
@@ -107,7 +107,8 @@ public final class CurseEventHandler {
         }
 
         long lastSleep = data.getLong(LAST_SLEEP_TAG);
-        boolean overdue = now - lastSleep >= INSANITY_TICKS;
+        long insanityTicks = Math.max(1L, Math.round(Config.CURSE_INSANITY_DAYS.get() * 24000.0D));
+        boolean overdue = now - lastSleep >= insanityTicks;
         if (overdue && !CurseType.INSANITY.isSuppressed(player)) {
             if (!player.hasEffect(ModEffects.INSANITY.get())) {
                 player.addEffect(new MobEffectInstance(
@@ -132,8 +133,12 @@ public final class CurseEventHandler {
     }
 
     public static float healthCap(Player player) {
-        int steps = Math.min(8, Math.max(0, player.experienceLevel) / 20);
-        double fraction = 0.1D + 0.1D * steps;
+        double fraction = (double) Config.CURSE_HEALTH_CAP_DEFAULT_PERCENT.get() / 100.0D;
+        int levelsPerStep = Math.max(1, Config.CURSE_HEALTH_CAP_LEVELS_PER_STEP.get());
+        int steps = Math.max(0, player.experienceLevel) / levelsPerStep;
+        fraction += steps * ((double) Config.CURSE_HEALTH_CAP_STEP_PERCENT.get() / 100.0D);
+        fraction = Math.min(fraction, (double) Config.CURSE_HEALTH_CAP_MAX_PERCENT.get() / 100.0D);
+        fraction = Math.max(0.0D, fraction);
         return (float) (player.getMaxHealth() * fraction);
     }
 
@@ -172,13 +177,15 @@ public final class CurseEventHandler {
             return;
         }
 
-        // Curse 3: outgoing damage <= 5 is nullified; otherwise reduced by 20%.
+        // Curse 3: outgoing damage at or below the threshold is nullified;
+        // higher damage is reduced by the configured percentage.
         if (!CurseType.DAMAGE_PENALTY.isSuppressed(attacker)) {
-            if (event.getAmount() <= 5.0F) {
+            if (event.getAmount() <= (double) Config.CURSE_DAMAGE_THRESHOLD.get()) {
                 event.setCanceled(true);
                 return;
             }
-            event.setAmount(event.getAmount() * 0.8F);
+            float factor = 1.0F - (float) (double) Config.CURSE_DAMAGE_REDUCTION_PERCENT.get() / 100.0F;
+            event.setAmount(event.getAmount() * factor);
         }
 
         // Curse 7: insanity can turn an attack against its owner.
@@ -218,7 +225,8 @@ public final class CurseEventHandler {
     }
 
     private static boolean hasHostileNearby(ServerLevel level, BlockPos pos) {
-        AABB area = new AABB(pos).inflate(HOSTILE_RADIUS, 8.0D, HOSTILE_RADIUS);
+        double radius = Config.CURSE_SPAWN_HOSTILE_RADIUS.get();
+        AABB area = new AABB(pos).inflate(radius, 8.0D, radius);
         return level.getEntitiesOfClass(LivingEntity.class, area,
                         entity -> entity instanceof Enemy && entity.isAlive())
                 .stream()

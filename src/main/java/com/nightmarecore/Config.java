@@ -34,6 +34,17 @@ public final class Config {
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_ARMOR;
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SUNLIGHT_DAMAGE_PERCENT;
 
+    public static final ForgeConfigSpec.DoubleValue CURSE_HEALTH_CAP_DEFAULT_PERCENT;
+    public static final ForgeConfigSpec.IntValue CURSE_HEALTH_CAP_LEVELS_PER_STEP;
+    public static final ForgeConfigSpec.DoubleValue CURSE_HEALTH_CAP_STEP_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue CURSE_HEALTH_CAP_MAX_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue CURSE_DAMAGE_THRESHOLD;
+    public static final ForgeConfigSpec.DoubleValue CURSE_DAMAGE_REDUCTION_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue CURSE_SPAWN_HOSTILE_RADIUS;
+    public static final ForgeConfigSpec.DoubleValue CURSE_DARKNESS_TRIGGER_SECONDS;
+    public static final ForgeConfigSpec.DoubleValue CURSE_DARKNESS_DAMAGE_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue CURSE_INSANITY_DAYS;
+
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
 
@@ -150,6 +161,78 @@ public final class Config {
                 .comment("梦魇暴露在阳光下时，每秒损失的最大生命值百分比。")
                 .translation("nightmare_core.config.sunlight_damage_percent")
                 .defineInRange("sunlightDamagePercent", 30.0D, 0.0D, 100.0D);
+        builder.pop();
+
+        builder.push("curses");
+        builder.comment("七重诅咒相关设置。此处只包含需要平衡调整的诅咒。");
+        builder.translation("nightmare_core.config.curses");
+
+        builder.push("health_cap");
+        builder.comment("第 2 诅咒：生命回复上限。");
+        builder.translation("nightmare_core.config.curse_health_cap");
+        CURSE_HEALTH_CAP_DEFAULT_PERCENT = builder
+                .comment("0 级时的生命回复上限比例（百分比）。默认 10%。")
+                .translation("nightmare_core.config.curse_health_cap_default")
+                .defineInRange("defaultPercent", 10.0D, 0.0D, 100.0D);
+        CURSE_HEALTH_CAP_LEVELS_PER_STEP = builder
+                .comment("每多少经验等级提升一次上限。默认 20 级。")
+                .translation("nightmare_core.config.curse_health_cap_levels")
+                .defineInRange("levelsPerIncrement", 20, 1, 10000);
+        CURSE_HEALTH_CAP_STEP_PERCENT = builder
+                .comment("每次提升增加的上限比例（百分比）。默认 10%。")
+                .translation("nightmare_core.config.curse_health_cap_step")
+                .defineInRange("incrementPercent", 10.0D, 0.0D, 100.0D);
+        CURSE_HEALTH_CAP_MAX_PERCENT = builder
+                .comment("生命回复上限的最高比例（百分比）。默认 90%。")
+                .translation("nightmare_core.config.curse_health_cap_max")
+                .defineInRange("maxPercent", 90.0D, 0.0D, 100.0D);
+        builder.pop();
+
+        builder.push("damage");
+        builder.comment("第 3 诅咒：伤害衰减。");
+        builder.translation("nightmare_core.config.curse_damage");
+        CURSE_DAMAGE_THRESHOLD = builder
+                .comment("伤害阈值。玩家对他人造成的伤害不高于此值时完全无效。默认 5 点。")
+                .translation("nightmare_core.config.curse_damage_threshold")
+                .defineInRange("threshold", 5.0D, 0.0D, 2048.0D);
+        CURSE_DAMAGE_REDUCTION_PERCENT = builder
+                .comment("超过阈值后的伤害削减比例（百分比）。默认 20%。")
+                .translation("nightmare_core.config.curse_damage_reduction")
+                .defineInRange("reductionPercent", 20.0D, 0.0D, 100.0D);
+        builder.pop();
+
+        builder.push("spawn_point");
+        builder.comment("第 4 诅咒：出生点限制。");
+        builder.translation("nightmare_core.config.curse_spawn_point");
+        CURSE_SPAWN_HOSTILE_RADIUS = builder
+                .comment("保存出生点时，检测敌对生物的水平范围（格）。默认 16。")
+                .translation("nightmare_core.config.curse_spawn_radius")
+                .defineInRange("hostileRadius", 16.0D, 0.0D, 128.0D);
+        builder.pop();
+
+        builder.push("darkness");
+        builder.comment("第 6 诅咒：黑暗侵蚀。");
+        builder.translation("nightmare_core.config.curse_darkness");
+        CURSE_DARKNESS_TRIGGER_SECONDS = builder
+                .comment("处于亮度低于 3 的环境多少秒后开始受伤。默认 5 秒。")
+                .translation("nightmare_core.config.curse_darkness_trigger")
+                .defineInRange("triggerSeconds", 5.0D, 0.0D, 600.0D);
+        CURSE_DARKNESS_DAMAGE_PERCENT = builder
+                .comment("触发后每秒损失的最大生命值比例（百分比）。默认 20%。",
+                        "该伤害不致死，最多保留 1 点生命。")
+                .translation("nightmare_core.config.curse_darkness_damage")
+                .defineInRange("damagePercentPerSecond", 20.0D, 0.0D, 100.0D);
+        builder.pop();
+
+        builder.push("insanity");
+        builder.comment("第 7 诅咒：精神失常。");
+        builder.translation("nightmare_core.config.curse_insanity");
+        CURSE_INSANITY_DAYS = builder
+                .comment("连续多少游戏日不入睡后触发精神失常。默认 7 天。")
+                .translation("nightmare_core.config.curse_insanity_days")
+                .defineInRange("days", 7.0D, 0.1D, 3650.0D);
+        builder.pop();
+
         builder.pop();
 
         SPEC = builder.build();
