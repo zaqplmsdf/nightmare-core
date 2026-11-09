@@ -81,6 +81,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
             damage.setBaseValue(damageFor(level.getDifficulty()));
         }
         if (isEye()) {
+            this.refreshDimensions();
             this.setNoGravity(true);
             this.navigation = new FlyingPathNavigation(this, level);
         }
@@ -140,6 +141,9 @@ public class NightmareEntity extends Zombie implements GeoEntity {
 
         ServerLevel serverLevel = (ServerLevel) this.level();
         if (isEye()) {
+            if (this.getBbWidth() != 0.8F || this.getBbHeight() != 0.8F) {
+                this.refreshDimensions();
+            }
             this.tickBite();
             this.updateFlight();
         }

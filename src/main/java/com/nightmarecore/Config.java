@@ -25,6 +25,13 @@ public final class Config {
     public static final ForgeConfigSpec.BooleanValue GIVE_CORE_ON_FIRST_SLEEP;
     public static final ForgeConfigSpec.DoubleValue NIGHTMARE_SPAWN_CHANCE_PERCENT;
     public static final ForgeConfigSpec.DoubleValue BLESSING_BAG_CHANCE_PERCENT;
+    public static final ForgeConfigSpec.BooleanValue NATURAL_SPAWN_ENABLED;
+    public static final ForgeConfigSpec.IntValue NATURAL_SPAWN_INTERVAL_TICKS;
+    public static final ForgeConfigSpec.DoubleValue NATURAL_SPAWN_CHANCE_PERCENT;
+    public static final ForgeConfigSpec.DoubleValue NATURAL_SPAWN_MIN_DISTANCE;
+    public static final ForgeConfigSpec.DoubleValue NATURAL_SPAWN_MAX_DISTANCE;
+    public static final ForgeConfigSpec.IntValue NATURAL_SPAWN_MAX_NEARBY;
+    public static final ForgeConfigSpec.DoubleValue MOON_FAVORED_MULTIPLIER;
 
     public static final VariantStats EYE;
     public static final VariantStats SKULL;
@@ -134,6 +141,35 @@ public final class Config {
                 .comment("击败梦魇后掉落祝福袋的概率（百分比）。")
                 .translation("nightmare_core.config.blessing_bag_chance")
                 .defineInRange("blessingBagChancePercent", 10.0D, 0.0D, 100.0D);
+
+        NATURAL_SPAWN_ENABLED = builder
+                .comment("是否允许佩戴梦核的玩家附近自然生成梦魇。")
+                .translation("nightmare_core.config.natural_spawn_enabled")
+                .define("naturalSpawnEnabled", true);
+        NATURAL_SPAWN_INTERVAL_TICKS = builder
+                .comment("自然生成判定间隔（tick）。默认 200（10 秒）。")
+                .translation("nightmare_core.config.natural_spawn_interval")
+                .defineInRange("naturalSpawnIntervalTicks", 200, 20, 12000);
+        NATURAL_SPAWN_CHANCE_PERCENT = builder
+                .comment("每次判定自然生成梦魇的概率（百分比）。")
+                .translation("nightmare_core.config.natural_spawn_chance")
+                .defineInRange("naturalSpawnChancePercent", 15.0D, 0.0D, 100.0D);
+        NATURAL_SPAWN_MIN_DISTANCE = builder
+                .comment("自然生成距离玩家的最小距离（格）。")
+                .translation("nightmare_core.config.natural_spawn_min_distance")
+                .defineInRange("naturalSpawnMinDistance", 12.0D, 4.0D, 64.0D);
+        NATURAL_SPAWN_MAX_DISTANCE = builder
+                .comment("自然生成距离玩家的最大距离（格）。")
+                .translation("nightmare_core.config.natural_spawn_max_distance")
+                .defineInRange("naturalSpawnMaxDistance", 32.0D, 8.0D, 96.0D);
+        NATURAL_SPAWN_MAX_NEARBY = builder
+                .comment("玩家附近允许存在的梦魇数量上限。")
+                .translation("nightmare_core.config.natural_spawn_max_nearby")
+                .defineInRange("naturalSpawnMaxNearby", 6, 1, 64);
+        MOON_FAVORED_MULTIPLIER = builder
+                .comment("当前月相指定梦魇的生成权重倍率。")
+                .translation("nightmare_core.config.moon_favored_multiplier")
+                .defineInRange("moonFavoredMultiplier", 5.0D, 1.0D, 20.0D);
 
         EYE = defineVariant(builder, "eye", "梦魇之眸",
                 20.0D, 3.0D, 3.0D, 3.0D, 0.23D, 35.0D, 2.0D, 30, 30.0D);

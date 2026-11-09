@@ -46,9 +46,10 @@ public final class ModEntities {
                     .build(new ResourceLocation(NightmareCore.MOD_ID, "nightmare_projectile").toString()));
 
     private static RegistryObject<EntityType<NightmareEntity>> register(String name) {
+        boolean eye = "rift_nightmare".equals(name);
         return ENTITY_TYPES.register(name, () -> EntityType.Builder
                 .of(NightmareEntity::new, MobCategory.MONSTER)
-                .sized(0.6F, 1.95F)
+                .sized(eye ? 0.8F : 0.6F, eye ? 0.8F : 1.95F)
                 .clientTrackingRange(10)
                 .build(new ResourceLocation(NightmareCore.MOD_ID, name).toString()));
     }
@@ -59,6 +60,21 @@ public final class ModEntities {
         int shadow = Math.max(0, Config.SHADOW.spawnWeight().get());
         int hand = Math.max(0, Config.HAND.spawnWeight().get());
         int heart = Math.max(0, Config.HEART.spawnWeight().get());
+
+        int favored = favoredVariantForPhase(level.getMoonPhase());
+        if (favored >= 0) {
+            double multiplier = Math.max(1.0D, Config.MOON_FAVORED_MULTIPLIER.get());
+            switch (favored) {
+                case 0 -> eye = (int) Math.round(eye * multiplier);
+                case 1 -> skull = (int) Math.round(skull * multiplier);
+                case 2 -> shadow = (int) Math.round(shadow * multiplier);
+                case 3 -> hand = (int) Math.round(hand * multiplier);
+                case 4 -> heart = (int) Math.round(heart * multiplier);
+                default -> {
+                }
+            }
+        }
+
         int total = eye + skull + shadow + hand + heart;
         if (total <= 0) {
             return null;
@@ -78,6 +94,24 @@ public final class ModEntities {
             type = TIDAL_NIGHTMARE.get();
         }
         return type.create(level);
+    }
+
+    /**
+     * 0=full moon Eye, 1=waning gibbous Skull, 2=third quarter Shadow,
+     * 3=waning crescent Hand, 4=new moon Heart, 5=waxing crescent Hand,
+     * 6=first quarter Shadow, 7=waxing gibbous Skull.
+     */
+    public static int favoredVariantForPhase(int phase) {
+        return switch (phase & 7) {
+            case 0 -> 0;
+            case 1 -> 1;
+            case 2 -> 2;
+            case 3 -> 3;
+            case 4 -> 4;
+            case 5 -> 3;
+            case 6 -> 2;
+            default -> 1;
+        };
     }
 
     public static Item materialFor(EntityType<?> type) {

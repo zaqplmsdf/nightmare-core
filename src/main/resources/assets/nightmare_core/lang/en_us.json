@@ -246,5 +246,12 @@
   "subtitles.nightmare_core.nightmare_eye_bite": "Nightmare Eye bites",
   "subtitles.nightmare_core.nightmare_eye_hurt": "Nightmare Eye hurts",
   "subtitles.nightmare_core.nightmare_eye_idle": "Nightmare Eye murmurs",
-  "subtitles.nightmare_core.nightmare_eye_death": "Nightmare Eye dies"
+  "subtitles.nightmare_core.nightmare_eye_death": "Nightmare Eye dies",
+  "nightmare_core.config.natural_spawn_enabled": "Enable Natural Nightmare Spawning",
+  "nightmare_core.config.natural_spawn_interval": "Natural Spawn Check Interval (ticks)",
+  "nightmare_core.config.natural_spawn_chance": "Natural Spawn Chance (%)",
+  "nightmare_core.config.natural_spawn_min_distance": "Natural Spawn Minimum Distance",
+  "nightmare_core.config.natural_spawn_max_distance": "Natural Spawn Maximum Distance",
+  "nightmare_core.config.natural_spawn_max_nearby": "Max Nearby Nightmares",
+  "nightmare_core.config.moon_favored_multiplier": "Moon-Favored Weight Multiplier"
 }

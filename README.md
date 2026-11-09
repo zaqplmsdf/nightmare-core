@@ -6,7 +6,7 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.9**：梦魇之眸改为真正的上下飞行（可在地面上方 0.5–2 格间升降），碰撞箱改为 0.8×0.8×0.8，模型重置为新的 `riven_eyeball.geo.json` / `riven_eyeball.animation.json`。
+> **0.8.10**：修复梦魇之眸同时出现 0.8 与僵尸碰撞箱的问题；加入佩戴梦核后的夜间自然生成，并按月相提高指定梦魇权重。
 
 
 
@@ -24,7 +24,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.9.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.10.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
@@ -253,6 +253,37 @@ Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示
 - 击败后清除原版僵尸掉落，**必定掉落 1–2 个梦魇碎片 + 1–2 个该类型专属材料**，有 **5%** 概率直接掉落对应的属性/功能赐福，并有 **10%** 概率额外掉落 1 个祝福袋。
 - 梦魇不会触发普通碎片掉落判定，避免双倍掉落。
 
+### 自然生成与月相
+
+只有**佩戴梦魇之核**的玩家会触发梦魇自然生成：
+
+- 仅在夜间、非和平难度、玩家非旁观模式时判定。
+- 默认每 **200 tick（10 秒）**判定一次，每次 **15%** 概率尝试生成。
+- 生成在玩家周围 **12–32 格**的地表，最多允许附近存在 **6 只**梦魇。
+- 生成时会直接锁定该玩家。
+- 玩家未佩戴梦核时不会自然生成。
+
+月相会提高指定梦魇的权重（默认倍率 **5.0**）：
+
+| 月相 | 月相名称 | 提高权重 |
+| ---: | --- | --- |
+| 0 | 满月 | 梦魇之眸 |
+| 1 | 亏凸月 | 梦魇之颅 |
+| 2 | 下弦月 | 梦魇之影 |
+| 3 | 残月 | 梦魇之手 |
+| 4 | 新月 | 梦魇之心 |
+| 5 | 蛾眉月 | 梦魇之手 |
+| 6 | 上弦月 | 梦魇之影 |
+| 7 | 盈凸月 | 梦魇之颅 |
+
+#### 碰撞箱修复
+
+0.8.9 中出现的两种碰撞箱不是两个实体：
+
+- 当时 `rift_nightmare` 的实体类型注册尺寸仍是僵尸的 `0.6×1.95`，部分实体没有及时刷新尺寸。
+- 0.8.10 把 `rift_nightmare` 的注册尺寸直接改为 `0.8×0.8`，并在构造和每 tick 检查时调用 `refreshDimensions()`。
+- 旧存档中的梦魇之眸也会在加载后自动修正为 0.8×0.8×0.8。
+
 ### 自定义模型与动画
 
 **梦魇之眸**（`rift_nightmare`）使用重置后的 `riven_eyeball` 模型：
@@ -371,6 +402,13 @@ Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示
 | `nightmare_core.giveCoreOnFirstSleep` | true | 第一次睡觉时在床边给予梦核 |
 | `nightmares.sleepSpawnChancePercent` | 10.0 | 佩戴核心入睡时生成梦魇的概率 |
 | `nightmares.blessingBagChancePercent` | 10.0 | 梦魇掉落祝福袋的概率 |
+| `nightmares.naturalSpawnEnabled` | true | 是否启用佩戴梦核时的自然生成 |
+| `nightmares.naturalSpawnIntervalTicks` | 200 | 自然生成判定间隔 |
+| `nightmares.naturalSpawnChancePercent` | 15.0 | 每次判定的生成概率 |
+| `nightmares.naturalSpawnMinDistance` | 12.0 | 距玩家最小生成距离 |
+| `nightmares.naturalSpawnMaxDistance` | 32.0 | 距玩家最大生成距离 |
+| `nightmares.naturalSpawnMaxNearby` | 6 | 附近梦魇数量上限 |
+| `nightmares.moonFavoredMultiplier` | 5.0 | 月相指定梦魇的权重倍率 |
 
 每个梦魇在 `[nightmares.<id>]` 下有独立配置：
 
@@ -456,12 +494,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.9.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.10.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-314ab5055564e88436508be627fc329da90929c3bd2c4a029516c975797f930c  nightmare_core-1.20.1-0.8.9.jar
+b9f159020e7aea7c7877e4ea69ddae6514abf1e4eb1df9162ae90fd112897a48  nightmare_core-1.20.1-0.8.10.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
@@ -488,9 +526,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **名称渲染**：新生成梦魇无 `CustomName`，且 `shouldShowName()` 返回 false。
 - **村民行为**：梦魇与村民近距离共处 8 秒后村民仍为 20 生命；`setTarget` 会拒绝村民/流浪商人。
 - **飞行测试**：在 `y=-59` 召唤梦魇之眸，无目标时稳定在 `y≈-59`（地面约 `y=-60`，约 1 格高度）；锁定目标后可在 0.5–2 格范围内升降。
-- **碰撞箱**：`getDimensions` 对梦魇之眸返回 `0.8×0.8` 底面、`0.8` 高度。
+- **碰撞箱**：`getDimensions` 对梦魇之眸返回 `0.8×0.8` 底面、`0.8` 高度；直接创建和自然生成的实测尺寸均为 `0.8×0.8`。
 - **模型重置**：新的 `riven_eyeball.geo.json` 含 26 根骨骼、1624 个立方体；动画键为完整 `animation.riven_eyeball.*`。
 - **撕咬时序**：动画/音效在攻击开始时触发，伤害在 10 tick 后结算。
+- **自然生成测试**：未佩戴梦核时 `beforeCore=false`；佩戴后 `hasCore=true`，100% 判定下成功生成 6 只并达到附近上限。
+- **月相权重**：满月测试 `phaseFavored=0`，对应梦魇之眸。
+- **旧实体修复**：旧存档中的梦魇之眸会在 tick 检测到非 0.8 尺寸时自动 `refreshDimensions()`。
 - **掉落修复测试**：用刷怪蛋/召唤生成的梦魇被击杀后掉落 2 个梦魇碎片 + 2 个专属材料，掉落事件正常。
 - **梦核依赖测试**：未佩戴梦核时祝福 `canEquip=false`，佩戴后为 `true`。
 - **变体测试**：梦魇之颅 32 生命/2.1 伤害；梦魇之影移速 0.345；梦魇之心移速 0；无附魔铁剑对梦魇之影 10 点伤害降至 6；梦魇之心光环取消周围梦魇伤害。
@@ -498,7 +539,7 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **18 个配方**。
 - **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
-- 0.8.9 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- 0.8.10 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。

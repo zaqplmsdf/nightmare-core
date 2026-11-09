@@ -246,5 +246,12 @@
   "subtitles.nightmare_core.nightmare_eye_bite": "梦魇之眸：啃咬",
   "subtitles.nightmare_core.nightmare_eye_hurt": "梦魇之眸：受击",
   "subtitles.nightmare_core.nightmare_eye_idle": "梦魇之眸：低鸣",
-  "subtitles.nightmare_core.nightmare_eye_death": "梦魇之眸：死亡"
+  "subtitles.nightmare_core.nightmare_eye_death": "梦魇之眸：死亡",
+  "nightmare_core.config.natural_spawn_enabled": "启用梦魇自然生成",
+  "nightmare_core.config.natural_spawn_interval": "自然生成判定间隔（tick）",
+  "nightmare_core.config.natural_spawn_chance": "自然生成概率（%）",
+  "nightmare_core.config.natural_spawn_min_distance": "自然生成最小距离（格）",
+  "nightmare_core.config.natural_spawn_max_distance": "自然生成最大距离（格）",
+  "nightmare_core.config.natural_spawn_max_nearby": "附近梦魇数量上限",
+  "nightmare_core.config.moon_favored_multiplier": "月相指定梦魇权重倍率"
 }
