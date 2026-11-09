@@ -1,0 +1,18 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:ashen_cinder"
+    },
+    {
+      "item": "nightmare_core:tidal_tear"
+    },
+    {
+      "item": "minecraft:nether_star"
+    }
+  ],
+  "fragment_cost": 16,
+  "result": {
+    "item": "nightmare_core:abyssal_crown"
+  }
+}

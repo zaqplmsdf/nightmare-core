@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:hollow_shell"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    }
+  ],
+  "fragment_cost": 4,
+  "result": {
+    "item": "nightmare_core:echo_bell"
+  }
+}

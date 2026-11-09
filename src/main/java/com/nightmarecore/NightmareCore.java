@@ -1,10 +1,14 @@
 package com.nightmarecore;
 
 import com.mojang.logging.LogUtils;
+import com.nightmarecore.registry.ModBlockEntities;
+import com.nightmarecore.registry.ModBlocks;
 import com.nightmarecore.registry.ModCreativeTabs;
 import com.nightmarecore.registry.ModEffects;
 import com.nightmarecore.registry.ModEntities;
 import com.nightmarecore.registry.ModItems;
+import com.nightmarecore.registry.ModMenuTypes;
+import com.nightmarecore.registry.ModRecipes;
 import com.nightmarecore.registry.ModSounds;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
@@ -27,6 +31,10 @@ public final class NightmareCore {
         IEventBus modBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         ModItems.register(modBus);
+        ModBlocks.register(modBus);
+        ModBlockEntities.register(modBus);
+        ModMenuTypes.register(modBus);
+        ModRecipes.register(modBus);
         ModCreativeTabs.register(modBus);
         ModEffects.register(modBus);
         ModEntities.register(modBus);

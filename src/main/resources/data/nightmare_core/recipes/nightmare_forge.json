@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FRF",
+    "SBS",
+    "FRF"
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    },
+    "R": {
+      "item": "nightmare_core:rift_shard"
+    },
+    "S": {
+      "item": "minecraft:stone"
+    },
+    "B": {
+      "item": "minecraft:crafting_table"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:nightmare_forge"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:ashen_cinder"
+    },
+    {
+      "item": "minecraft:stone"
+    }
+  ],
+  "fragment_cost": 4,
+  "result": {
+    "item": "nightmare_core:stonebound_pendant"
+  }
+}

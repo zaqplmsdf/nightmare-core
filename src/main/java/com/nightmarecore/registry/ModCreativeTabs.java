@@ -20,6 +20,7 @@ public final class ModCreativeTabs {
                     .icon(() -> new ItemStack(ModItems.NIGHTMARE_CORE.get()))
                     .displayItems((parameters, output) -> {
                         output.accept(ModItems.NIGHTMARE_CORE.get());
+                        output.accept(ModBlocks.NIGHTMARE_FORGE_ITEM.get());
                         output.accept(ModItems.NIGHTMARE_FRAGMENT.get());
                         output.accept(ModItems.ASHEN_CINDER.get());
                         output.accept(ModItems.TIDAL_TEAR.get());

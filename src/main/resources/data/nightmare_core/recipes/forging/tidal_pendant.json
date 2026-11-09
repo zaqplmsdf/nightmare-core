@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:tidal_tear"
+    },
+    {
+      "item": "minecraft:prismarine_shard"
+    }
+  ],
+  "fragment_cost": 8,
+  "result": {
+    "item": "nightmare_core:tidal_pendant"
+  }
+}

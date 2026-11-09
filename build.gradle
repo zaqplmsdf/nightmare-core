@@ -60,6 +60,10 @@ dependencies {
     // GeckoLib is used by the animated Nightmare Eye model.
     compileOnly files("libs/geckolib-forge-${geckolib_version}.jar")
     runtimeOnly files("libs/geckolib-forge-${geckolib_version}.jar")
+
+    // JEI integration is optional at runtime.
+    compileOnly files("libs/jei-1.20.1-forge-${jei_version}.jar")
+    runtimeOnly files("libs/jei-1.20.1-forge-${jei_version}.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {

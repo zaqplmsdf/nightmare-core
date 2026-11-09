@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:rift_shard"
+    },
+    {
+      "item": "minecraft:iron_sword"
+    }
+  ],
+  "fragment_cost": 4,
+  "result": {
+    "item": "nightmare_core:dreamrend_fang"
+  }
+}

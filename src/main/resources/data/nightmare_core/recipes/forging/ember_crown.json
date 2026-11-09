@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:ashen_cinder"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    }
+  ],
+  "fragment_cost": 8,
+  "result": {
+    "item": "nightmare_core:ember_crown"
+  }
+}

@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:hollow_shell"
+    },
+    {
+      "item": "minecraft:bone"
+    }
+  ],
+  "fragment_cost": 8,
+  "result": {
+    "item": "nightmare_core:hollow_charm"
+  }
+}

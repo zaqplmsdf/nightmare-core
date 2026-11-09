@@ -113,7 +113,7 @@
   "tooltip.nightmare_core.ember_blade.weapon": "As a weapon: slightly stronger than a diamond sword.",
   "tooltip.nightmare_core.ember_blade.cost": "Each cut costs 64 durability (512 total) and deals 6 magic damage to you.",
   "tooltip.nightmare_core.ember_blade.flavor": "The embers on this edge are the one thing the nightmare fears.",
-  "tooltip.nightmare_core.blessing_bag.use": "Use to receive one random basic blessing.",
+  "tooltip.nightmare_core.blessing_bag.use": "Use to receive one random tier-1 trinket.",
   "tooltip.nightmare_core.blessing_bag.source": "Dropped by the Nightmare.",
   "tooltip.nightmare_core.material.ashen_cinder": "Dropped by the Nightmare Skull.",
   "tooltip.nightmare_core.material.tidal_tear": "Dropped by the Nightmare Heart.",
@@ -253,5 +253,11 @@
   "nightmare_core.config.natural_spawn_min_distance": "Natural Spawn Minimum Distance",
   "nightmare_core.config.natural_spawn_max_distance": "Natural Spawn Maximum Distance",
   "nightmare_core.config.natural_spawn_max_nearby": "Max Nearby Nightmares",
-  "nightmare_core.config.moon_favored_multiplier": "Moon-Favored Weight Multiplier"
+  "nightmare_core.config.moon_favored_multiplier": "Moon-Favored Weight Multiplier",
+  "block.nightmare_core.nightmare_forge": "Nightmare Forge",
+  "container.nightmare_core.nightmare_forge": "Nightmare Forge",
+  "jei.nightmare_core.forging": "Nightmare Forging",
+  "jei.nightmare_core.fuel_cost": "Requires %s Nightmare Fragments",
+  "tooltip.nightmare_core.nightmare_forge": "Uses Nightmare Fragments as fuel to forge trinkets from materials.",
+  "tooltip.nightmare_core.trinket_tier": "Tier %s Trinket"
 }

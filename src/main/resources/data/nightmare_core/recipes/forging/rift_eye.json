@@ -1,0 +1,15 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:rift_shard"
+    },
+    {
+      "item": "minecraft:ender_pearl"
+    }
+  ],
+  "fragment_cost": 8,
+  "result": {
+    "item": "nightmare_core:rift_eye"
+  }
+}

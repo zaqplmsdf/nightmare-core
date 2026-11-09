@@ -113,7 +113,7 @@
   "tooltip.nightmare_core.ember_blade.weapon": "作为武器：伤害略强于钻石剑。",
   "tooltip.nightmare_core.ember_blade.cost": "每次切下核心消耗 64 点耐久（共 512 点），并对自身造成 6 点魔法伤害。",
   "tooltip.nightmare_core.ember_blade.flavor": "刀刃上残留的余烬，是梦魇唯一害怕的东西。",
-  "tooltip.nightmare_core.blessing_bag.use": "使用后获得一个随机基础赐福。",
+  "tooltip.nightmare_core.blessing_bag.use": "使用后获得一件随机一级饰品。",
   "tooltip.nightmare_core.blessing_bag.source": "由梦魇掉落。",
   "tooltip.nightmare_core.material.ashen_cinder": "由梦魇之颅掉落。",
   "tooltip.nightmare_core.material.tidal_tear": "由梦魇之心掉落。",
@@ -146,7 +146,7 @@
   "message.nightmare_core.ember_blade.cut": "余烬之刃切断了梦魇的束缚。",
   "message.nightmare_core.ember_blade.no_core": "梦魇槽中没有可切断的梦魇之核。",
   "message.nightmare_core.nightmare.spawned": "床下传来了梦魇的呼吸。",
-  "message.nightmare_core.blessing_bag.opened": "祝福袋中开出：%s",
+  "message.nightmare_core.blessing_bag.opened": "赐福袋中开出：%s",
   "message.nightmare_core.starter_core": "你在床边发现了一枚梦魇之核。",
   "message.nightmare_core.requires_core": "必须佩戴梦魇之核才能使用。",
   "tooltip.nightmare_core.requires_core": "需要佩戴梦魇之核。",
@@ -253,5 +253,11 @@
   "nightmare_core.config.natural_spawn_min_distance": "自然生成最小距离（格）",
   "nightmare_core.config.natural_spawn_max_distance": "自然生成最大距离（格）",
   "nightmare_core.config.natural_spawn_max_nearby": "附近梦魇数量上限",
-  "nightmare_core.config.moon_favored_multiplier": "月相指定梦魇权重倍率"
+  "nightmare_core.config.moon_favored_multiplier": "月相指定梦魇权重倍率",
+  "block.nightmare_core.nightmare_forge": "梦魇工坊",
+  "container.nightmare_core.nightmare_forge": "梦魇工坊",
+  "jei.nightmare_core.forging": "梦魇工坊锻造",
+  "jei.nightmare_core.fuel_cost": "需要 %s 个梦魇碎片",
+  "tooltip.nightmare_core.nightmare_forge": "用梦魇碎片作为燃料，将材料锻造成饰品。",
+  "tooltip.nightmare_core.trinket_tier": "%s 级饰品"
 }
