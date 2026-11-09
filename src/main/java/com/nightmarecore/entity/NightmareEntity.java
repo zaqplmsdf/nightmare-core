@@ -12,9 +12,11 @@ import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EntityDimensions;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.Pose;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.monster.Zombie;
@@ -139,7 +141,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         ServerLevel serverLevel = (ServerLevel) this.level();
         if (isEye()) {
             this.tickBite();
-            this.updateHover();
+            this.updateFlight();
         }
         if (this.tickCount % 20 == 0 && isInSunlight()) {
             float percent = (float) (double) stats().sunlightPercent().get() / 100.0F;
@@ -171,7 +173,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     }
 
     private void rangedAttack(LivingEntity target) {
-        this.triggerAnim("attack", "glare");
+        this.triggerAnim("attack", "animation.riven_eyeball.glare");
         NightmareProjectile projectile = new NightmareProjectile(
                 this.level(), this, (float) (double) Config.EYE_PROJECTILE_DAMAGE.get());
         double dx = target.getX() - this.getX();
@@ -192,7 +194,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
             if (target instanceof LivingEntity living) {
                 this.biteTicks = 10;
                 this.biteTarget = living;
-                this.triggerAnim("attack", "bite");
+                this.triggerAnim("attack", "animation.riven_eyeball.bite");
                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                         ModSounds.NIGHTMARE_EYE_BITE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
                 return true;
@@ -220,7 +222,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         }
     }
 
-    private void updateHover() {
+    private void updateFlight() {
         if (this.level().isClientSide) {
             return;
         }
@@ -230,10 +232,17 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         if (hit.getType() == HitResult.Type.MISS) {
             return;
         }
-        double targetY = hit.getLocation().y + 1.5D;
-        double dy = targetY - this.getY();
-        if (Math.abs(dy) > 0.01D) {
-            double step = Mth.clamp(dy * 0.25D, -0.15D, 0.15D);
+
+        double floor = hit.getLocation().y;
+        double minY = floor + 0.5D;
+        double maxY = floor + 2.0D;
+        LivingEntity target = this.getTarget();
+        double desiredY = target != null ? target.getEyeY() - 0.2D : floor + 1.0D;
+        desiredY = Mth.clamp(desiredY, minY, maxY);
+
+        double dy = desiredY - this.getY();
+        if (Math.abs(dy) > 0.05D) {
+            double step = Mth.clamp(dy * 0.25D, -0.12D, 0.12D);
             if (this.level().noCollision(this, this.getBoundingBox().move(0.0D, step, 0.0D))) {
                 this.setPos(this.getX(), this.getY() + step, this.getZ());
             }
@@ -246,6 +255,11 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         return this.level().isDay()
                 && this.level().canSeeSky(this.blockPosition())
                 && !this.level().isClientSide;
+    }
+
+    @Override
+    public EntityDimensions getDimensions(Pose pose) {
+        return isEye() ? EntityDimensions.scalable(0.8F, 0.8F) : super.getDimensions(pose);
     }
 
     @Override
@@ -279,11 +293,14 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "movement", 5,
-                state -> state.setAndContinue(RawAnimation.begin().thenLoop("move"))));
+                state -> state.setAndContinue(RawAnimation.begin()
+                        .thenLoop("animation.riven_eyeball.move"))));
         controllers.add(new AnimationController<>(this, "attack", 0,
                 state -> PlayState.STOP)
-                .triggerableAnim("glare", RawAnimation.begin().thenPlay("glare"))
-                .triggerableAnim("bite", RawAnimation.begin().thenPlay("bite")));
+                .triggerableAnim("animation.riven_eyeball.glare",
+                        RawAnimation.begin().thenPlay("animation.riven_eyeball.glare"))
+                .triggerableAnim("animation.riven_eyeball.bite",
+                        RawAnimation.begin().thenPlay("animation.riven_eyeball.bite")));
     }
 
     @Override
