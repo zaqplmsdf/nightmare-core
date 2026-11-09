@@ -2,10 +2,13 @@ package com.nightmarecore.entity;
 
 import com.nightmarecore.Config;
 import com.nightmarecore.registry.ModEntities;
+import com.nightmarecore.registry.ModSounds;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
@@ -14,8 +17,10 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
+import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
 import software.bernie.geckolib.core.animation.AnimationController;
@@ -40,8 +45,6 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         this.setPersistenceRequired();
         this.setBaby(false);
         this.setCanBreakDoors(false);
-        this.setCustomName(Component.translatable(type.getDescriptionId()));
-        this.setCustomNameVisible(true);
         this.setItemSlot(EquipmentSlot.MAINHAND, ItemStack.EMPTY);
         this.setItemSlot(EquipmentSlot.OFFHAND, ItemStack.EMPTY);
 
@@ -154,15 +157,14 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     private void rangedAttack(LivingEntity target) {
         this.triggerAnim("attack", "glare");
         NightmareProjectile projectile = new NightmareProjectile(
-                this.level(), this, damageFor(this.level().getDifficulty()));
+                this.level(), this, (float) (double) Config.EYE_PROJECTILE_DAMAGE.get());
         double dx = target.getX() - this.getX();
         double dy = target.getEyeY() - projectile.getY();
         double dz = target.getZ() - this.getZ();
-        projectile.shoot(dx, dy, dz, 0.22F, 0.0F);
+        projectile.shoot(dx, dy, dz, (float) (double) Config.EYE_PROJECTILE_SPEED.get(), 0.0F);
         this.level().addFreshEntity(projectile);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                net.minecraft.sounds.SoundEvents.SHULKER_SHOOT,
-                net.minecraft.sounds.SoundSource.HOSTILE, 0.8F, 0.8F);
+                ModSounds.NIGHTMARE_EYE_GLARE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
     }
 
     @Override
@@ -170,6 +172,8 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         boolean hit = super.doHurtTarget(target);
         if (hit && isEye()) {
             this.triggerAnim("attack", "bite");
+            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                    ModSounds.NIGHTMARE_EYE_BITE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
         }
         if (hit && isHand() && target instanceof LivingEntity living) {
             var effect = this.getRandom().nextBoolean() ? MobEffects.POISON : MobEffects.WITHER;
@@ -182,6 +186,29 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         return this.level().isDay()
                 && this.level().canSeeSky(this.blockPosition())
                 && !this.level().isClientSide;
+    }
+
+    @Override
+    public boolean shouldShowName() {
+        return false;
+    }
+
+    @Override
+    public void setTarget(@Nullable LivingEntity target) {
+        if (target instanceof AbstractVillager) {
+            target = null;
+        }
+        super.setTarget(target);
+    }
+
+    @Override
+    protected SoundEvent getAmbientSound() {
+        return isEye() ? ModSounds.NIGHTMARE_EYE_IDLE.get() : super.getAmbientSound();
+    }
+
+    @Override
+    protected SoundEvent getHurtSound(DamageSource source) {
+        return isEye() ? ModSounds.NIGHTMARE_EYE_HURT.get() : super.getHurtSound(source);
     }
 
     @Override

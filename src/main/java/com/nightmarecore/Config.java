@@ -34,6 +34,8 @@ public final class Config {
 
     public static final ForgeConfigSpec.DoubleValue EYE_RANGED_DISTANCE;
     public static final ForgeConfigSpec.IntValue EYE_RANGED_COOLDOWN_TICKS;
+    public static final ForgeConfigSpec.DoubleValue EYE_PROJECTILE_DAMAGE;
+    public static final ForgeConfigSpec.DoubleValue EYE_PROJECTILE_SPEED;
     public static final ForgeConfigSpec.DoubleValue SHADOW_DAMAGE_REDUCTION_PERCENT;
     public static final ForgeConfigSpec.DoubleValue HEART_AURA_RADIUS;
     public static final ForgeConfigSpec.IntValue HAND_EFFECT_DURATION_TICKS;
@@ -152,6 +154,14 @@ public final class Config {
                 .comment("梦魇之眸两次远程射击的间隔（tick）。")
                 .translation("nightmare_core.config.nightmares.eye.ranged_cooldown")
                 .defineInRange("eyeRangedCooldownTicks", 30, 5, 1200);
+        EYE_PROJECTILE_DAMAGE = builder
+                .comment("梦魇之眸弹射物的伤害。")
+                .translation("nightmare_core.config.nightmares.eye.projectile_damage")
+                .defineInRange("eyeProjectileDamage", 3.0D, 0.0D, 2048.0D);
+        EYE_PROJECTILE_SPEED = builder
+                .comment("梦魇之眸弹射物的初速度（格/tick）。")
+                .translation("nightmare_core.config.nightmares.eye.projectile_speed")
+                .defineInRange("eyeProjectileSpeed", 0.22D, 0.01D, 4.0D);
         SHADOW_DAMAGE_REDUCTION_PERCENT = builder
                 .comment("梦魇之影受到无附魔武器攻击时的减伤比例（百分比）。")
                 .translation("nightmare_core.config.nightmares.shadow.damage_reduction")

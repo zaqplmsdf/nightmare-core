@@ -5,6 +5,7 @@ import com.nightmarecore.registry.ModCreativeTabs;
 import com.nightmarecore.registry.ModEffects;
 import com.nightmarecore.registry.ModEntities;
 import com.nightmarecore.registry.ModItems;
+import com.nightmarecore.registry.ModSounds;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
@@ -29,6 +30,7 @@ public final class NightmareCore {
         ModCreativeTabs.register(modBus);
         ModEffects.register(modBus);
         ModEntities.register(modBus);
+        ModSounds.register(modBus);
         modBus.addListener(this::commonSetup);
 
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);

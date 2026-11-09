@@ -239,5 +239,11 @@
   "nightmare_core.config.nightmares.eye.ranged_cooldown": "远程射击间隔（tick）",
   "nightmare_core.config.nightmares.shadow.damage_reduction": "无附魔武器减伤比例",
   "nightmare_core.config.nightmares.heart.aura_radius": "光环保护半径",
-  "nightmare_core.config.nightmares.hand.effect_duration": "中毒/凋灵持续时间（tick）"
+  "nightmare_core.config.nightmares.hand.effect_duration": "中毒/凋灵持续时间（tick）",
+  "nightmare_core.config.nightmares.eye.projectile_damage": "弹射物伤害",
+  "nightmare_core.config.nightmares.eye.projectile_speed": "弹射物初速度（格/tick）",
+  "subtitles.nightmare_core.nightmare_eye_glare": "梦魇之眸：凝视",
+  "subtitles.nightmare_core.nightmare_eye_bite": "梦魇之眸：啃咬",
+  "subtitles.nightmare_core.nightmare_eye_hurt": "梦魇之眸：受击",
+  "subtitles.nightmare_core.nightmare_eye_idle": "梦魇之眸：低鸣"
 }

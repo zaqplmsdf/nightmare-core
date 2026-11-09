@@ -239,5 +239,11 @@
   "nightmare_core.config.nightmares.eye.ranged_cooldown": "Ranged Cooldown (ticks)",
   "nightmare_core.config.nightmares.shadow.damage_reduction": "Unenchanted Weapon Reduction",
   "nightmare_core.config.nightmares.heart.aura_radius": "Aura Radius",
-  "nightmare_core.config.nightmares.hand.effect_duration": "Poison/Wither Duration (ticks)"
+  "nightmare_core.config.nightmares.hand.effect_duration": "Poison/Wither Duration (ticks)",
+  "nightmare_core.config.nightmares.eye.projectile_damage": "Projectile Damage",
+  "nightmare_core.config.nightmares.eye.projectile_speed": "Projectile Initial Speed (blocks/tick)",
+  "subtitles.nightmare_core.nightmare_eye_glare": "Nightmare Eye glares",
+  "subtitles.nightmare_core.nightmare_eye_bite": "Nightmare Eye bites",
+  "subtitles.nightmare_core.nightmare_eye_hurt": "Nightmare Eye hurts",
+  "subtitles.nightmare_core.nightmare_eye_idle": "Nightmare Eye murmurs"
 }

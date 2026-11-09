@@ -1,0 +1,38 @@
+{
+  "nightmare_eye_glare": {
+    "subtitle": "subtitles.nightmare_core.nightmare_eye_glare",
+    "sounds": [
+      {
+        "name": "nightmare_core:nightmare_eye_glare",
+        "stream": false
+      }
+    ]
+  },
+  "nightmare_eye_bite": {
+    "subtitle": "subtitles.nightmare_core.nightmare_eye_bite",
+    "sounds": [
+      {
+        "name": "nightmare_core:nightmare_eye_bite",
+        "stream": false
+      }
+    ]
+  },
+  "nightmare_eye_hurt": {
+    "subtitle": "subtitles.nightmare_core.nightmare_eye_hurt",
+    "sounds": [
+      {
+        "name": "nightmare_core:nightmare_eye_hurt",
+        "stream": false
+      }
+    ]
+  },
+  "nightmare_eye_idle": {
+    "subtitle": "subtitles.nightmare_core.nightmare_eye_idle",
+    "sounds": [
+      {
+        "name": "nightmare_core:nightmare_eye_idle",
+        "stream": false
+      }
+    ]
+  }
+}
