@@ -2,6 +2,12 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:ember_crown"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:ashen_cinder"
     },
     {
@@ -14,7 +20,7 @@
       "item": "minecraft:ghast_tear"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:ember_heart"
   }

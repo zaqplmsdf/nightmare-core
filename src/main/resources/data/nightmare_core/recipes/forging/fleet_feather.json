@@ -2,6 +2,12 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:moonshadow_cloak"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:hollow_shell"
     },
     {
@@ -14,7 +20,7 @@
       "item": "minecraft:rabbit_foot"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:fleet_feather"
   }

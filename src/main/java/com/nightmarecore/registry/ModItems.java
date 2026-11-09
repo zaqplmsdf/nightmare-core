@@ -96,9 +96,15 @@ public final class ModItems {
             List.of(new AttributeBlessingItem.AttributeBonus(Attributes.MAX_HEALTH, 4.0D),
                     new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 1.5D)),
             List.of(MobEffects.REGENERATION), Rarity.RARE);
-    public static final RegistryObject<Item> CURSE_REVERSAL = register("curse_reversal",
-            () -> new BlessingItem("curse_reversal",
-                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+    public static final RegistryObject<Item> DUSK_CHARM = specialBlessing("dusk_charm",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ARMOR, 0.5D)),
+            List.of(), Rarity.UNCOMMON);
+    public static final RegistryObject<Item> DREAM_SAND_POUCH = specialBlessing("dream_sand_pouch",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.LUCK, 1.0D)),
+            List.of(), Rarity.UNCOMMON);
+    public static final RegistryObject<Item> THORN_BRACER = specialBlessing("thorn_bracer",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 0.5D)),
+            List.of(), Rarity.UNCOMMON);
 
     public static final RegistryObject<Item> NIGHTMARE_PRISM = register("nightmare_prism",
             () -> new NightmarePrismItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));

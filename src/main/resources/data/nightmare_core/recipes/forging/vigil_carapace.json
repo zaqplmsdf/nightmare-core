@@ -2,19 +2,25 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
-      "item": "nightmare_core:vigil_eye"
+      "item": "nightmare_core:vigil_lantern"
     },
     {
-      "item": "minecraft:iron_ingot"
+      "item": "minecraft:nether_star"
+    },
+    {
+      "item": "nightmare_core:vigil_eye"
     },
     {
       "item": "minecraft:shield"
     },
     {
       "item": "minecraft:scute"
+    },
+    {
+      "item": "minecraft:iron_ingot"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:vigil_carapace"
   }

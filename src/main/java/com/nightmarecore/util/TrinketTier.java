@@ -15,15 +15,11 @@ public final class TrinketTier {
     public static final int TIER_3 = 3;
 
     private static final List<Item> TIER_1_ITEMS = List.of(
-            ModItems.EMBER_HEART.get(),
-            ModItems.DREAMREND_FANG.get(),
-            ModItems.FLEET_FEATHER.get(),
-            ModItems.VIGIL_CARAPACE.get(),
-            ModItems.STONEBOUND_PENDANT.get(),
-            ModItems.ECHO_BELL.get(),
-            ModItems.DREAMHUNTER_EYE.get(),
             ModItems.MOONLIT_CHARM.get(),
-            ModItems.BLOODMOON_BRACER.get()
+            ModItems.BLOODMOON_BRACER.get(),
+            ModItems.DUSK_CHARM.get(),
+            ModItems.DREAM_SAND_POUCH.get(),
+            ModItems.THORN_BRACER.get()
     );
 
     private static final List<Item> TIER_2_ITEMS = List.of(
@@ -37,10 +33,16 @@ public final class TrinketTier {
     );
 
     private static final List<Item> TIER_3_ITEMS = List.of(
+            ModItems.EMBER_HEART.get(),
+            ModItems.DREAMREND_FANG.get(),
+            ModItems.FLEET_FEATHER.get(),
+            ModItems.VIGIL_CARAPACE.get(),
+            ModItems.STONEBOUND_PENDANT.get(),
+            ModItems.ECHO_BELL.get(),
+            ModItems.DREAMHUNTER_EYE.get(),
             ModItems.ABYSSAL_CROWN.get(),
             ModItems.VOID_GAUNTLET.get(),
-            ModItems.FATE_DICE.get(),
-            ModItems.CURSE_REVERSAL.get()
+            ModItems.FATE_DICE.get()
     );
 
     public static List<Item> tier1() {

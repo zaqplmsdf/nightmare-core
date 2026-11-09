@@ -18,7 +18,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 /**
  * A blessing trinket. Blessings no longer grant attributes; each one suppresses
- * exactly one of the core's eight curses.
+ * exactly one of the core's seven curses.
  */
 public class BlessingItem extends Item implements ICurioItem {
 

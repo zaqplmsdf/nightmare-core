@@ -57,7 +57,6 @@ public final class Config {
     public static final ForgeConfigSpec.DoubleValue CURSE_DARKNESS_TRIGGER_SECONDS;
     public static final ForgeConfigSpec.DoubleValue CURSE_DARKNESS_DAMAGE_PERCENT;
     public static final ForgeConfigSpec.DoubleValue CURSE_INSANITY_DAYS;
-    public static final ForgeConfigSpec.DoubleValue CURSE_REVERSAL_DAMAGE_PERCENT;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -283,14 +282,6 @@ public final class Config {
                 .defineInRange("days", 7.0D, 0.1D, 3650.0D);
         builder.pop();
 
-        builder.push("reversal");
-        builder.comment("第 8 诅咒：逆转。治疗会被转化为伤害。");
-        builder.translation("nightmare_core.config.curse_reversal");
-        CURSE_REVERSAL_DAMAGE_PERCENT = builder
-                .comment("被逆转的治疗量中有多少转化为伤害（百分比）。")
-                .translation("nightmare_core.config.curse_reversal_damage")
-                .defineInRange("damagePercent", 50.0D, 0.0D, 200.0D);
-        builder.pop();
 
         builder.pop();
 

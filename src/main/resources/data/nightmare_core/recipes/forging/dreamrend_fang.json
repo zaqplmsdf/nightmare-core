@@ -2,6 +2,12 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:bloodpact_ring"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:rift_shard"
     },
     {
@@ -14,7 +20,7 @@
       "item": "minecraft:phantom_membrane"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:dreamrend_fang"
   }

@@ -1,0 +1,21 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:hollow_shell"
+    },
+    {
+      "item": "minecraft:sand"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:sugar"
+    }
+  ],
+  "fragment_cost": 16,
+  "result": {
+    "item": "nightmare_core:dream_sand_pouch"
+  }
+}

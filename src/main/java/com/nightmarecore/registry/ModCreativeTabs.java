@@ -46,7 +46,9 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.BLOODMOON_BRACER.get());
                         output.accept(ModItems.MOONSHADOW_CLOAK.get());
                         output.accept(ModItems.BLOODPACT_RING.get());
-                        output.accept(ModItems.CURSE_REVERSAL.get());
+                        output.accept(ModItems.DUSK_CHARM.get());
+                        output.accept(ModItems.DREAM_SAND_POUCH.get());
+                        output.accept(ModItems.THORN_BRACER.get());
                         output.accept(ModItems.NIGHTMARE_PRISM.get());
                         output.accept(ModItems.DREAM_ANCHOR.get());
                         output.accept(ModItems.EMBER_BLADE.get());

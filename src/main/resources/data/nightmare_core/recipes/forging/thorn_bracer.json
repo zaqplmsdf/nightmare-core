@@ -1,0 +1,21 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:vigil_eye"
+    },
+    {
+      "item": "minecraft:cactus"
+    },
+    {
+      "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "fragment_cost": 16,
+  "result": {
+    "item": "nightmare_core:thorn_bracer"
+  }
+}

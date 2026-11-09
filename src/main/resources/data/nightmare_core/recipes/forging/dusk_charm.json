@@ -1,0 +1,21 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:ashen_cinder"
+    },
+    {
+      "item": "minecraft:coal"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "fragment_cost": 16,
+  "result": {
+    "item": "nightmare_core:dusk_charm"
+  }
+}
