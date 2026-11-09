@@ -14,17 +14,24 @@ import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.monster.Zombie;
-import net.minecraft.world.entity.projectile.Arrow;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import software.bernie.geckolib.animatable.GeoEntity;
+import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
+import software.bernie.geckolib.core.animation.AnimationController;
+import software.bernie.geckolib.core.animation.AnimatableManager;
+import software.bernie.geckolib.core.animation.RawAnimation;
+import software.bernie.geckolib.core.object.PlayState;
+import software.bernie.geckolib.util.GeckoLibUtil;
 
 /**
  * Shared implementation for the five Nightmare variants. All stats are loaded
  * from the nightmare config; defaults intentionally match a vanilla zombie.
  */
-public class NightmareEntity extends Zombie {
+public class NightmareEntity extends Zombie implements GeoEntity {
 
     public static final String NIGHTMARE_TAG = "nightmare_core:nightmare";
+    private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
 
     public NightmareEntity(EntityType<NightmareEntity> type, Level level) {
         super(type, level);
@@ -145,22 +152,25 @@ public class NightmareEntity extends Zombie {
     }
 
     private void rangedAttack(LivingEntity target) {
-        Arrow arrow = new Arrow(this.level(), this);
-        arrow.setOwner(this);
-        arrow.setBaseDamage(damageFor(this.level().getDifficulty()));
+        this.triggerAnim("attack", "glare");
+        NightmareProjectile projectile = new NightmareProjectile(
+                this.level(), this, damageFor(this.level().getDifficulty()));
         double dx = target.getX() - this.getX();
-        double dy = target.getEyeY() - arrow.getY();
+        double dy = target.getEyeY() - projectile.getY();
         double dz = target.getZ() - this.getZ();
-        arrow.shoot(dx, dy, dz, 1.6F, 0.05F);
-        this.level().addFreshEntity(arrow);
+        projectile.shoot(dx, dy, dz, 0.22F, 0.0F);
+        this.level().addFreshEntity(projectile);
         this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                net.minecraft.sounds.SoundEvents.ARROW_SHOOT,
-                net.minecraft.sounds.SoundSource.HOSTILE, 0.8F, 1.1F);
+                net.minecraft.sounds.SoundEvents.SHULKER_SHOOT,
+                net.minecraft.sounds.SoundSource.HOSTILE, 0.8F, 0.8F);
     }
 
     @Override
     public boolean doHurtTarget(Entity target) {
         boolean hit = super.doHurtTarget(target);
+        if (hit && isEye()) {
+            this.triggerAnim("attack", "bite");
+        }
         if (hit && isHand() && target instanceof LivingEntity living) {
             var effect = this.getRandom().nextBoolean() ? MobEffects.POISON : MobEffects.WITHER;
             living.addEffect(new MobEffectInstance(effect, Config.HAND_EFFECT_DURATION_TICKS.get(), 0));
@@ -172,6 +182,21 @@ public class NightmareEntity extends Zombie {
         return this.level().isDay()
                 && this.level().canSeeSky(this.blockPosition())
                 && !this.level().isClientSide;
+    }
+
+    @Override
+    public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
+        controllers.add(new AnimationController<>(this, "movement", 5,
+                state -> state.setAndContinue(RawAnimation.begin().thenLoop("move"))));
+        controllers.add(new AnimationController<>(this, "attack", 0,
+                state -> PlayState.STOP)
+                .triggerableAnim("glare", RawAnimation.begin().thenPlay("glare"))
+                .triggerableAnim("bite", RawAnimation.begin().thenPlay("bite")));
+    }
+
+    @Override
+    public AnimatableInstanceCache getAnimatableInstanceCache() {
+        return this.animationCache;
     }
 
     @Override

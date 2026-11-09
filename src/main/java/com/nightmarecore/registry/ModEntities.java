@@ -3,6 +3,7 @@ package com.nightmarecore.registry;
 import com.nightmarecore.Config;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.entity.NightmareEntity;
+import com.nightmarecore.entity.NightmareProjectile;
 import java.util.List;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
@@ -35,6 +36,14 @@ public final class ModEntities {
     public static final List<RegistryObject<EntityType<NightmareEntity>>> ALL = List.of(
             ASHEN_NIGHTMARE, TIDAL_NIGHTMARE, RIFT_NIGHTMARE, VIGIL_NIGHTMARE, HOLLOW_NIGHTMARE
     );
+
+    public static final RegistryObject<EntityType<NightmareProjectile>> NIGHTMARE_PROJECTILE =
+            ENTITY_TYPES.register("nightmare_projectile", () -> EntityType.Builder
+                    .<NightmareProjectile>of(NightmareProjectile::new, MobCategory.MISC)
+                    .sized(0.5F, 0.5F)
+                    .clientTrackingRange(6)
+                    .updateInterval(10)
+                    .build(new ResourceLocation(NightmareCore.MOD_ID, "nightmare_projectile").toString()));
 
     private static RegistryObject<EntityType<NightmareEntity>> register(String name) {
         return ENTITY_TYPES.register(name, () -> EntityType.Builder

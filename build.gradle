@@ -56,6 +56,10 @@ dependencies {
     // A local compile-time copy keeps the build reproducible on offline pack machines.
     compileOnly files("libs/curios-forge-${curios_version}.jar")
     runtimeOnly files("libs/curios-forge-${curios_version}.jar")
+
+    // GeckoLib is used by the animated Nightmare Eye model.
+    compileOnly files("libs/geckolib-forge-${geckolib_version}.jar")
+    runtimeOnly files("libs/geckolib-forge-${geckolib_version}.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {

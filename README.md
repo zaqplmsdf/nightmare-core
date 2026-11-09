@@ -6,7 +6,7 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.5**：为五种梦魇分别添加独立属性/权重配置；梦魇之眸远程参数、梦魇之影减伤、梦魇之心光环半径、梦魇之手效果时长均可单独调整。
+> **0.8.6**：梦魇之眸替换为全新的 `riven_eyeball` 模型与 `glare` / `bite` / `move` 动画；远程攻击改为无重力、慢速的梦魇弹射物。
 
 
 
@@ -19,15 +19,17 @@
 | Minecraft | 1.20.1 |
 | Forge | 47.4.9（建议 47.4.x） |
 | Curios | 5.14.1+1.20.1（必需） |
+| GeckoLib | 4.8.3+1.20.1（必需，梦魇之眸模型与动画） |
 | Java | 17 |
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.5.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.6.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
+3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
 
-Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。模组没有把 Curios 打包进自身 jar。
+Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示缺少依赖。模组没有把这两个依赖打包进自身 jar。
 
 ## 核心循环
 
@@ -233,7 +235,7 @@ Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。�
 
 | 实体 ID | 名称 | 机制 | 生成权重 | 当前模型 |
 | --- | --- | --- | ---: | --- |
-| `rift_nightmare` | 梦魇之眸 | 距离 >4 格时射箭，近距离转为近战 | 30% | 自定义「梦魇之眸」模型 |
+| `rift_nightmare` | 梦魇之眸 | 距离 >4 格时发射慢速无重力弹射物，近距离近战 | 30% | GeckoLib「梦魇之眸」模型 |
 | `ashen_nightmare` | 梦魇之颅 | 近战，基础生命 ×1.6，伤害 ×0.7 | 25% | 原版僵尸（占位） |
 | `vigil_nightmare` | 梦魇之影 | 近战，移速 ×1.5；无附魔武器伤害 -40% | 20% | 原版僵尸（占位） |
 | `hollow_nightmare` | 梦魇之手 | 近战，攻击附加中毒或凋灵 | 20% | 原版僵尸（占位） |
@@ -251,17 +253,28 @@ Curios 是硬前置，未安装时游戏会在加载阶段提示缺少依赖。�
 - 击败后清除原版僵尸掉落，**必定掉落 1–2 个梦魇碎片 + 1–2 个该类型专属材料**，有 **5%** 概率直接掉落对应的属性/功能赐福，并有 **10%** 概率额外掉落 1 个祝福袋。
 - 梦魇不会触发普通碎片掉落判定，避免双倍掉落。
 
-### 自定义模型
+### 自定义模型与动画
 
-**梦魇之眸**（`rift_nightmare`）已套用 `梦魇之眸.bbmodel` 转换出的自定义几何模型；其余四种暂时继续使用原版僵尸模型占位。
+**梦魇之眸**（`rift_nightmare`）使用 `riven_eyeball` 模型：
 
-![nightmare eye](design/nightmare_eye_preview.png)
+- 模型：`assets/nightmare_core/geo/nightmare_eye.geo.json`
+- 纹理：`assets/nightmare_core/textures/entity/nightmare_eye.png`
+- 动画：`assets/nightmare_core/animations/nightmare_eye.animation.json`
+- 模型类：`NightmareEyeGeoModel`
+- 渲染器：`NightmareEyeGeoRenderer`
+- 动画：
+  - `glare`：远程凝视攻击
+  - `bite`：近战啃咬攻击
+  - `move`：移动与待机循环
+- 使用 GeckoLib 4.8.3 驱动；其余四种梦魇仍使用僵尸模型占位。
+- 近距离时梦魇之眸改用近战 AI，并触发 `bite`；距离较远时触发 `glare` 并发射弹射物。
 
-- 模型纹理：`assets/nightmare_core/textures/entity/nightmare_eye.png`。
-- 模型类：`NightmareEyeModel`，渲染器：`NightmareEyeRenderer`。
-- 已绑定动画：待机、移动、攻击、受伤、死亡；使用原 `动画.java` 的关键帧节奏手动实现，不额外依赖 GeckoLib。
-- “远程/近战模型切换”目前先实现为远程射击与近战行为切换；独立的近战形态模型需要后续模型文件。
-- 其余四种实体类型已经分开注册，后续可以逐个替换模型。
+### 梦魇弹射物
+
+- 远程攻击不再使用原版箭矢，而是无重力、慢速的梦魇弹射物。
+- 纹理：`assets/nightmare_core/textures/entity/nightmare_projectile.png`
+- 速度约 `0.22` 格/tick，不会被重力下坠；命中实体或方块后消失，最长存在 200 tick。
+- 伤害沿用梦魇之眸当前难度的攻击伤害配置。
 
 ### 刷怪蛋
 
@@ -412,19 +425,19 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.5.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.6.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-dec7a07454b1b239afb0a468ecba1c5819c6526d7a5807e86768faf73cbdaeba  nightmare_core-1.20.1-0.8.5.jar
+851f6290fd301d7c31e7f32461df0af87c87e44319cf1235e2f9c88261c2c435  nightmare_core-1.20.1-0.8.6.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
 
 ## 验证记录
 
-- 在 **Forge 47.4.16** 专用服务器 + **Curios 5.14.1** 上完成生产环境加载测试。
+- 在 **Forge 47.4.16** 专用服务器 + **Curios 5.14.1** + **GeckoLib 4.8.3** 上完成生产环境加载测试。
 - Curios 输出 `Loaded 12 curio slots`，`/curios list` 确认槽位类型存在：
   - `nightmare - nightmare_core`
   - `blessing - nightmare_core`
@@ -437,7 +450,8 @@ dec7a07454b1b239afb0a468ecba1c5819c6526d7a5807e86768faf73cbdaeba  nightmare_core
 - **属性/功能赐福测试**：余烬王冠提供 +2 护甲、+0.5 护甲韧性，并正确施加抗火；不压制任何诅咒。
 - **阳光测试**：白天暴露在天空下时，20 生命的梦魇按每秒 6 点扣血：20 → 14 → 8 → 2 → 死亡；可通过配置调整。
 - **刷怪蛋**：五种梦魇刷怪蛋已注册并通过服务端加载；物品模型使用原版 `template_spawn_egg`。
-- **模型动画**：梦魇之眸已绑定待机、移动、攻击、受伤、死亡五组动画，模型层 `nightmare_eye` 正常注册。
+- **模型动画**：梦魇之眸已改用 GeckoLib `riven_eyeball` 模型，动画名为 `glare` / `bite` / `move`。
+- **弹射物测试**：服务端成功召唤 `nightmare_core:nightmare_projectile`，位置与实体注册正常；无重力与慢速逻辑已接入。
 - **掉落修复测试**：用刷怪蛋/召唤生成的梦魇被击杀后掉落 2 个梦魇碎片 + 2 个专属材料，掉落事件正常。
 - **梦核依赖测试**：未佩戴梦核时祝福 `canEquip=false`，佩戴后为 `true`。
 - **变体测试**：梦魇之颅 32 生命/2.1 伤害；梦魇之影移速 0.345；梦魇之心移速 0；无附魔铁剑对梦魇之影 10 点伤害降至 6；梦魇之心光环取消周围梦魇伤害。
@@ -445,7 +459,7 @@ dec7a07454b1b239afb0a468ecba1c5819c6526d7a5807e86768faf73cbdaeba  nightmare_core
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **18 个配方**。
 - **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
-- 0.8.5 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- 0.8.6 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。
@@ -472,7 +486,7 @@ dec7a07454b1b239afb0a468ecba1c5819c6526d7a5807e86768faf73cbdaeba  nightmare_core
 - `灰烬余烬 / 潮汐之泪 / 裂隙碎片 / 守夜之眼 / 空壳残片`：五种梦魇专属材料图标。
 - `余烬王冠 / 潮汐吊坠 / 裂隙之瞳 / 守夜提灯 / 空壳护符`：五件基础属性/功能赐福图标。
 - `深渊王冠 / 虚空护手 / 命运骰子`：三件强力数值/机制赐福图标。
-- `梦魇`：暂时直接使用原版僵尸模型，五种实体类型已经分开注册，后续可分别替换模型。
+- `梦魇`：梦魇之眸使用 GeckoLib 模型，其余四种暂时使用原版僵尸模型，后续可分别替换。
 - `精神失常`：状态效果图标位于 `assets/nightmare_core/textures/mob_effect/insanity.png`。
 
 四张原始图在 `design/source/` 中保留；空槽图标为适配 Curios 深色界面做了轻微提亮，其余物品图标由 `tools/generate_assets.py` 生成。重新生成：
@@ -491,9 +505,9 @@ python tools/generate_data.py
 - 取核心会使赐福槽缩回 0 格，Curios 会把已装备的赐福弹出；建议在安全位置使用余烬之刃。
 - 同种赐福不可重复；通过命令强行放入的重复项会在最多 1 秒内被服务器退回。
 - 生存模式无法通过 Curios 界面取下核心；创造模式保留管理员取下途径。
-- 睡眠梦魇使用五种独立自定义实体类型，但暂时套用原版僵尸模型；其他模组对僵尸的强化/削弱可能同时生效。
+- 睡眠梦魇使用五种独立自定义实体类型；梦魇之眸使用 GeckoLib 模型，其余四种暂时套用原版僵尸模型，其他模组对僵尸的强化/削弱可能同时生效。
 - 梦魇默认属性与原版僵尸一致，并全部可在配置中修改；旧的 200 生命/12-18 伤害/0.8 格每秒不再是默认值。
-- 梦魇之眸使用自定义「梦魇之眸」模型与动画，其余四种仍为僵尸占位模型。
+- 梦魇之眸使用 GeckoLib 自定义模型与动画，其余四种仍为僵尸占位模型。
 - 梦魇刷怪蛋支持五种实体，可在创造物品栏或 `/give` 中获取。
 - 七重诅咒与三赐福槽的取舍是刻意设计的；祝福袋只给随机基础赐福，不保证能拿到想压制的诅咒对应件。
 - 生命回复上限按当前最大生命值计算；梦核不再改变最大生命值，0 级上限为基础 20 的 10%（2 点），余烬心室是主要解法。

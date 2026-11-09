@@ -1,13 +1,13 @@
-# Local compile dependency
+# Local compile dependencies
 
-`curios-forge-5.14.1+1.20.1.jar` is kept here only so the project can be
-compiled and loaded in a local test instance without depending on a remote
-Maven metadata request during `build`.
+`curios-forge-5.14.1+1.20.1.jar` and `geckolib-forge-1.20.1-4.8.3.jar` are kept
+here only so the project can be compiled and loaded in a local test instance
+without depending on remote Maven metadata during `build`.
 
-It is **not** copied into the Nightmare Core jar and is **not** redistributed
-as part of the mod. Curios remains a separate, mandatory runtime dependency
-for the modpack.
+They are **not** copied into the Nightmare Core jar and are **not redistributed**
+as part of the mod. Curios and GeckoLib remain separate, mandatory runtime
+dependencies for the modpack.
 
-For a fresh checkout on another machine, replace this file with the matching
-Curios Forge 5.14.1+1.20.1 jar (or update `curios_version` in
-`gradle.properties` and the file name in `build.gradle`).
+For a fresh checkout on another machine, replace these files with matching
+versions (or update `curios_version` / `geckolib_version` in
+`gradle.properties` and the file names in `build.gradle`).

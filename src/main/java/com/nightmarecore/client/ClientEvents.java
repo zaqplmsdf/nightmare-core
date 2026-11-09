@@ -11,16 +11,12 @@ import net.minecraftforge.fml.common.Mod;
 public final class ClientEvents {
 
     @SubscribeEvent
-    public static void registerLayers(EntityRenderersEvent.RegisterLayerDefinitions event) {
-        event.registerLayerDefinition(NightmareEyeModel.LAYER, NightmareEyeModel::createBodyLayer);
-    }
-
-    @SubscribeEvent
     public static void registerRenderers(EntityRenderersEvent.RegisterRenderers event) {
         ModEntities.ALL.stream()
                 .filter(type -> type != ModEntities.RIFT_NIGHTMARE)
                 .forEach(type -> event.registerEntityRenderer(type.get(), NightmareRenderer::new));
-        event.registerEntityRenderer(ModEntities.RIFT_NIGHTMARE.get(), NightmareEyeRenderer::new);
+        event.registerEntityRenderer(ModEntities.RIFT_NIGHTMARE.get(), NightmareEyeGeoRenderer::new);
+        event.registerEntityRenderer(ModEntities.NIGHTMARE_PROJECTILE.get(), NightmareProjectileRenderer::new);
     }
 
     private ClientEvents() {
