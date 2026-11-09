@@ -6,7 +6,7 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.7**：梦魇之眸加入凝视/啃咬/受击/待机音效；弹射物伤害与初速度可配置；移除名称渲染；梦魇不再主动仇恨村民。
+> **0.8.8**：梦魇之眸撕咬动画/音效提前 0.5 秒到命中前；加入 1–2 格悬浮飞行；加入死亡音效；重新确认 GeckoLib 模型加载链路。
 
 
 
@@ -24,7 +24,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.7.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.8.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
@@ -268,6 +268,14 @@ Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示
   - `move`：移动与待机循环
 - 使用 GeckoLib 4.8.3 驱动；其余四种梦魇仍使用僵尸模型占位。
 - 近距离时梦魇之眸改用近战 AI，并触发 `bite`；距离较远时触发 `glare` 并发射弹射物。
+- 0.8.8 重新确认模型资源打包，并继续通过 GeckoLib `GeoModel` + `GeoEntityRenderer` 加载。
+
+### 撕咬时序与飞行
+
+- 撕咬动画和音效在攻击开始时触发，实际伤害延后 **10 tick（0.5 秒）**结算，使撕咬动作/声音比命中提前约 0.5 秒。
+- 梦魇之眸脱离重力，悬浮在脚下地面以上约 **1.5 格**，并使用飞行寻路；不会像僵尸一样贴地。
+- 悬浮高度保持在 1–2 格范围内；遇到低矮空间时不会强行穿墙上升。
+- 其余四种梦魇仍保持地面移动。
 
 ### 梦魇弹射物
 
@@ -284,9 +292,10 @@ Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示
 | `nightmare_eye_glare` | `sounds/nightmare_eye_glare.ogg` | 远程凝视攻击 |
 | `nightmare_eye_bite` | `sounds/nightmare_eye_bite.ogg` | 近战啃咬命中 |
 | `nightmare_eye_hurt` | `sounds/nightmare_eye_hurt.ogg` | 受击 |
+| `nightmare_eye_death` | `sounds/nightmare_eye_death.ogg` | 死亡 |
 | `nightmare_eye_idle` | `sounds/nightmare_eye_idle.ogg` | 待机环境音 |
 
-- 原始素材为 `凝视攻击.mp3`、`啃咬攻击.mp3`、`受击.mp3`、`待机.mp3`，已转为单声道 OGG Vorbis。
+- 原始素材为 `凝视攻击.mp3`、`啃咬攻击.mp3`、`受击.mp3`、`死亡.mp3`、`待机.mp3`，已转为单声道 OGG Vorbis。
 - 音效字幕位于 `zh_cn.json` / `en_us.json` 的 `subtitles.nightmare_core.*`。
 
 ### 名称与村民
@@ -446,12 +455,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.7.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.8.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-38f1f245fcff0861b180ea37aa956b77a7ad1031c9c3abfe3d61d1086427b1fd  nightmare_core-1.20.1-0.8.7.jar
+70de37bea9586b8c898d903ce29ba2adc13c10aa72345a3c3819c1e1581c9a38  nightmare_core-1.20.1-0.8.8.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
@@ -474,9 +483,11 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **模型动画**：梦魇之眸已改用 GeckoLib `riven_eyeball` 模型，动画名为 `glare` / `bite` / `move`。
 - **弹射物测试**：服务端成功召唤 `nightmare_core:nightmare_projectile`，位置与实体注册正常；无重力与慢速逻辑已接入。
 - **弹射物配置**：服务端生成 `eyeProjectileDamage=3.0` 与 `eyeProjectileSpeed=0.22`，代码读取正常。
-- **音效**：四段 MP3 已转成单声道 OGG Vorbis，`sounds.json` 注册四个音效事件。
+- **音效**：五段 MP3 已转成单声道 OGG Vorbis，`sounds.json` 注册五个音效事件。
 - **名称渲染**：新生成梦魇无 `CustomName`，且 `shouldShowName()` 返回 false。
 - **村民行为**：梦魇与村民近距离共处 8 秒后村民仍为 20 生命；`setTarget` 会拒绝村民/流浪商人。
+- **悬浮测试**：在 `y=-59` 召唤梦魇之眸，稳定悬浮在 `y≈-58.51`（约 1.5 格高度）。
+- **撕咬时序**：动画/音效在攻击开始时触发，伤害在 10 tick 后结算。
 - **掉落修复测试**：用刷怪蛋/召唤生成的梦魇被击杀后掉落 2 个梦魇碎片 + 2 个专属材料，掉落事件正常。
 - **梦核依赖测试**：未佩戴梦核时祝福 `canEquip=false`，佩戴后为 `true`。
 - **变体测试**：梦魇之颅 32 生命/2.1 伤害；梦魇之影移速 0.345；梦魇之心移速 0；无附魔铁剑对梦魇之影 10 点伤害降至 6；梦魇之心光环取消周围梦魇伤害。
@@ -484,7 +495,7 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **18 个配方**。
 - **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
-- 0.8.7 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- 0.8.8 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。

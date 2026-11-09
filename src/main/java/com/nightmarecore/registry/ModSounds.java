@@ -16,6 +16,7 @@ public final class ModSounds {
     public static final RegistryObject<SoundEvent> NIGHTMARE_EYE_GLARE = register("nightmare_eye_glare");
     public static final RegistryObject<SoundEvent> NIGHTMARE_EYE_BITE = register("nightmare_eye_bite");
     public static final RegistryObject<SoundEvent> NIGHTMARE_EYE_HURT = register("nightmare_eye_hurt");
+    public static final RegistryObject<SoundEvent> NIGHTMARE_EYE_DEATH = register("nightmare_eye_death");
     public static final RegistryObject<SoundEvent> NIGHTMARE_EYE_IDLE = register("nightmare_eye_idle");
 
     private static RegistryObject<SoundEvent> register(String name) {

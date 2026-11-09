@@ -16,10 +16,15 @@ import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.navigation.FlyingPathNavigation;
 import net.minecraft.world.entity.monster.Zombie;
 import net.minecraft.world.entity.npc.AbstractVillager;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.ClipContext;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
+import net.minecraft.util.Mth;
 import org.jetbrains.annotations.Nullable;
 import software.bernie.geckolib.animatable.GeoEntity;
 import software.bernie.geckolib.core.animatable.instance.AnimatableInstanceCache;
@@ -37,6 +42,9 @@ public class NightmareEntity extends Zombie implements GeoEntity {
 
     public static final String NIGHTMARE_TAG = "nightmare_core:nightmare";
     private final AnimatableInstanceCache animationCache = GeckoLibUtil.createInstanceCache(this);
+    private int biteTicks;
+    @Nullable
+    private LivingEntity biteTarget;
 
     public NightmareEntity(EntityType<NightmareEntity> type, Level level) {
         super(type, level);
@@ -69,6 +77,10 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         var damage = this.getAttribute(Attributes.ATTACK_DAMAGE);
         if (damage != null) {
             damage.setBaseValue(damageFor(level.getDifficulty()));
+        }
+        if (isEye()) {
+            this.setNoGravity(true);
+            this.navigation = new FlyingPathNavigation(this, level);
         }
     }
 
@@ -125,6 +137,10 @@ public class NightmareEntity extends Zombie implements GeoEntity {
         }
 
         ServerLevel serverLevel = (ServerLevel) this.level();
+        if (isEye()) {
+            this.tickBite();
+            this.updateHover();
+        }
         if (this.tickCount % 20 == 0 && isInSunlight()) {
             float percent = (float) (double) stats().sunlightPercent().get() / 100.0F;
             float damage = this.getMaxHealth() * percent;
@@ -169,17 +185,61 @@ public class NightmareEntity extends Zombie implements GeoEntity {
 
     @Override
     public boolean doHurtTarget(Entity target) {
-        boolean hit = super.doHurtTarget(target);
-        if (hit && isEye()) {
-            this.triggerAnim("attack", "bite");
-            this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
-                    ModSounds.NIGHTMARE_EYE_BITE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
+        if (isEye() && !this.level().isClientSide) {
+            if (this.biteTicks > 0) {
+                return false;
+            }
+            if (target instanceof LivingEntity living) {
+                this.biteTicks = 10;
+                this.biteTarget = living;
+                this.triggerAnim("attack", "bite");
+                this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
+                        ModSounds.NIGHTMARE_EYE_BITE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
+                return true;
+            }
         }
+
+        boolean hit = super.doHurtTarget(target);
         if (hit && isHand() && target instanceof LivingEntity living) {
             var effect = this.getRandom().nextBoolean() ? MobEffects.POISON : MobEffects.WITHER;
             living.addEffect(new MobEffectInstance(effect, Config.HAND_EFFECT_DURATION_TICKS.get(), 0));
         }
         return hit;
+    }
+
+    private void tickBite() {
+        if (this.biteTicks <= 0) {
+            return;
+        }
+        if (--this.biteTicks == 0) {
+            LivingEntity target = this.biteTarget;
+            this.biteTarget = null;
+            if (target != null && target.isAlive() && this.distanceToSqr(target) <= 16.0D) {
+                super.doHurtTarget(target);
+            }
+        }
+    }
+
+    private void updateHover() {
+        if (this.level().isClientSide) {
+            return;
+        }
+        BlockHitResult hit = this.level().clip(new ClipContext(
+                this.position(), this.position().add(0.0D, -16.0D, 0.0D),
+                ClipContext.Block.COLLIDER, ClipContext.Fluid.ANY, this));
+        if (hit.getType() == HitResult.Type.MISS) {
+            return;
+        }
+        double targetY = hit.getLocation().y + 1.5D;
+        double dy = targetY - this.getY();
+        if (Math.abs(dy) > 0.01D) {
+            double step = Mth.clamp(dy * 0.25D, -0.15D, 0.15D);
+            if (this.level().noCollision(this, this.getBoundingBox().move(0.0D, step, 0.0D))) {
+                this.setPos(this.getX(), this.getY() + step, this.getZ());
+            }
+        }
+        this.setDeltaMovement(this.getDeltaMovement().x, 0.0D, this.getDeltaMovement().z);
+        this.fallDistance = 0.0F;
     }
 
     private boolean isInSunlight() {
@@ -209,6 +269,11 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     @Override
     protected SoundEvent getHurtSound(DamageSource source) {
         return isEye() ? ModSounds.NIGHTMARE_EYE_HURT.get() : super.getHurtSound(source);
+    }
+
+    @Override
+    protected SoundEvent getDeathSound() {
+        return isEye() ? ModSounds.NIGHTMARE_EYE_DEATH.get() : super.getDeathSound();
     }
 
     @Override

@@ -26,6 +26,15 @@
       }
     ]
   },
+  "nightmare_eye_death": {
+    "subtitle": "subtitles.nightmare_core.nightmare_eye_death",
+    "sounds": [
+      {
+        "name": "nightmare_core:nightmare_eye_death",
+        "stream": false
+      }
+    ]
+  },
   "nightmare_eye_idle": {
     "subtitle": "subtitles.nightmare_core.nightmare_eye_idle",
     "sounds": [
