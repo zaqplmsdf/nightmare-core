@@ -6,9 +6,15 @@
     },
     {
       "item": "minecraft:iron_sword"
+    },
+    {
+      "item": "minecraft:flint"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
     }
   ],
-  "fragment_cost": 4,
+  "fragment_cost": 16,
   "result": {
     "item": "nightmare_core:dreamrend_fang"
   }

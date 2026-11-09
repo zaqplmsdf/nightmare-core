@@ -9,7 +9,7 @@ import net.minecraft.world.item.Item;
 import com.nightmarecore.util.CurioUtil;
 
 /**
- * The seven curses and the blessing that suppresses each one. Only three
+ * The eight curses and the blessing that suppresses each one. Only three
  * blessing slots exist, so the player must choose which three curses to keep
  * suppressed.
  */
@@ -21,7 +21,8 @@ public enum CurseType {
     SPAWN_POINT("spawn_point", ModItems.STONEBOUND_PENDANT),
     AWAKE_DOUBLE_DAMAGE("awake_double_damage", ModItems.FLEET_FEATHER),
     DARKNESS("darkness", ModItems.DREAMHUNTER_EYE),
-    INSANITY("insanity", ModItems.ECHO_BELL);
+    INSANITY("insanity", ModItems.ECHO_BELL),
+    REVERSAL("reversal", ModItems.CURSE_REVERSAL);
 
     private final String id;
     private final Supplier<Item> blessing;

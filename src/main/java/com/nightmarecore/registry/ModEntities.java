@@ -135,19 +135,19 @@ public final class ModEntities {
 
     public static Item blessingFor(EntityType<?> type) {
         if (type == ASHEN_NIGHTMARE.get()) {
-            return ModItems.EMBER_CROWN.get();
+            return ModItems.EMBER_HEART.get();
         }
         if (type == TIDAL_NIGHTMARE.get()) {
-            return ModItems.TIDAL_PENDANT.get();
+            return ModItems.MOONLIT_CHARM.get();
         }
         if (type == RIFT_NIGHTMARE.get()) {
-            return ModItems.RIFT_EYE.get();
+            return ModItems.DREAMHUNTER_EYE.get();
         }
         if (type == VIGIL_NIGHTMARE.get()) {
-            return ModItems.VIGIL_LANTERN.get();
+            return ModItems.VIGIL_CARAPACE.get();
         }
         if (type == HOLLOW_NIGHTMARE.get()) {
-            return ModItems.HOLLOW_CHARM.get();
+            return ModItems.ECHO_BELL.get();
         }
         return ModItems.NIGHTMARE_FRAGMENT.get();
     }

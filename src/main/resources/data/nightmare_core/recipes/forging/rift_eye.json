@@ -2,13 +2,22 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:dreamhunter_eye"
+    },
+    {
       "item": "nightmare_core:rift_shard"
     },
     {
       "item": "minecraft:ender_pearl"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
     }
   ],
-  "fragment_cost": 8,
+  "fragment_cost": 32,
   "result": {
     "item": "nightmare_core:rift_eye"
   }

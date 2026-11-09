@@ -1,0 +1,24 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:fleet_feather"
+    },
+    {
+      "item": "minecraft:phantom_membrane"
+    },
+    {
+      "item": "minecraft:blue_ice"
+    },
+    {
+      "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:leather"
+    }
+  ],
+  "fragment_cost": 32,
+  "result": {
+    "item": "nightmare_core:moonshadow_cloak"
+  }
+}

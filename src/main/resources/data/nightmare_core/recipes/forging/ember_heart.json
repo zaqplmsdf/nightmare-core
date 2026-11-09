@@ -6,9 +6,15 @@
     },
     {
       "item": "minecraft:blaze_powder"
+    },
+    {
+      "item": "minecraft:glistering_melon_slice"
+    },
+    {
+      "item": "minecraft:ghast_tear"
     }
   ],
-  "fragment_cost": 4,
+  "fragment_cost": 16,
   "result": {
     "item": "nightmare_core:ember_heart"
   }

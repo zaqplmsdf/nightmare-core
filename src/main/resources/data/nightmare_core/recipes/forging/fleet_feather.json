@@ -6,9 +6,15 @@
     },
     {
       "item": "minecraft:feather"
+    },
+    {
+      "item": "minecraft:sugar"
+    },
+    {
+      "item": "minecraft:rabbit_foot"
     }
   ],
-  "fragment_cost": 4,
+  "fragment_cost": 16,
   "result": {
     "item": "nightmare_core:fleet_feather"
   }

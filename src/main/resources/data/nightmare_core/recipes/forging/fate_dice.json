@@ -2,16 +2,25 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:rift_eye"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:vigil_eye"
     },
     {
       "item": "nightmare_core:hollow_shell"
     },
     {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:amethyst_shard"
+    },
+    {
+      "item": "minecraft:gold_block"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:fate_dice"
   }

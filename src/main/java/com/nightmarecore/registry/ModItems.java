@@ -81,6 +81,25 @@ public final class ModItems {
     public static final RegistryObject<Item> FATE_DICE = register("fate_dice",
             () -> new FateDiceItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
 
+    public static final RegistryObject<Item> MOONLIT_CHARM = specialBlessing("moonlit_charm",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ARMOR, 1.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.MOVEMENT_SPEED, 0.005D)),
+            List.of(), Rarity.UNCOMMON);
+    public static final RegistryObject<Item> BLOODMOON_BRACER = specialBlessing("bloodmoon_bracer",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 1.0D)),
+            List.of(), Rarity.UNCOMMON);
+    public static final RegistryObject<Item> MOONSHADOW_CLOAK = specialBlessing("moonshadow_cloak",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.ARMOR, 2.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.MOVEMENT_SPEED, 0.01D)),
+            List.of(MobEffects.SLOW_FALLING), Rarity.RARE);
+    public static final RegistryObject<Item> BLOODPACT_RING = specialBlessing("bloodpact_ring",
+            List.of(new AttributeBlessingItem.AttributeBonus(Attributes.MAX_HEALTH, 4.0D),
+                    new AttributeBlessingItem.AttributeBonus(Attributes.ATTACK_DAMAGE, 1.5D)),
+            List.of(MobEffects.REGENERATION), Rarity.RARE);
+    public static final RegistryObject<Item> CURSE_REVERSAL = register("curse_reversal",
+            () -> new BlessingItem("curse_reversal",
+                    new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
+
     public static final RegistryObject<Item> NIGHTMARE_PRISM = register("nightmare_prism",
             () -> new NightmarePrismItem(new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
     public static final RegistryObject<Item> DREAM_ANCHOR = register("dream_anchor",
@@ -114,8 +133,14 @@ public final class ModItems {
     private static RegistryObject<Item> specialBlessing(
             String id, List<AttributeBlessingItem.AttributeBonus> bonuses,
             List<net.minecraft.world.effect.MobEffect> effects) {
+        return specialBlessing(id, bonuses, effects, Rarity.RARE);
+    }
+
+    private static RegistryObject<Item> specialBlessing(
+            String id, List<AttributeBlessingItem.AttributeBonus> bonuses,
+            List<net.minecraft.world.effect.MobEffect> effects, Rarity rarity) {
         return register(id, () -> new AttributeBlessingItem(id, bonuses, effects,
-                new Item.Properties().stacksTo(1).rarity(Rarity.RARE)));
+                new Item.Properties().stacksTo(1).rarity(rarity)));
     }
 
     private static RegistryObject<Item> register(String name, Supplier<? extends Item> supplier) {

@@ -2,16 +2,25 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:hollow_charm"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:rift_shard"
     },
     {
       "item": "nightmare_core:hollow_shell"
     },
     {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:echo_shard"
+    },
+    {
+      "item": "minecraft:obsidian"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:void_gauntlet"
   }

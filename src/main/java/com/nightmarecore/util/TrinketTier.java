@@ -21,7 +21,9 @@ public final class TrinketTier {
             ModItems.VIGIL_CARAPACE.get(),
             ModItems.STONEBOUND_PENDANT.get(),
             ModItems.ECHO_BELL.get(),
-            ModItems.DREAMHUNTER_EYE.get()
+            ModItems.DREAMHUNTER_EYE.get(),
+            ModItems.MOONLIT_CHARM.get(),
+            ModItems.BLOODMOON_BRACER.get()
     );
 
     private static final List<Item> TIER_2_ITEMS = List.of(
@@ -29,13 +31,16 @@ public final class TrinketTier {
             ModItems.TIDAL_PENDANT.get(),
             ModItems.RIFT_EYE.get(),
             ModItems.VIGIL_LANTERN.get(),
-            ModItems.HOLLOW_CHARM.get()
+            ModItems.HOLLOW_CHARM.get(),
+            ModItems.MOONSHADOW_CLOAK.get(),
+            ModItems.BLOODPACT_RING.get()
     );
 
     private static final List<Item> TIER_3_ITEMS = List.of(
             ModItems.ABYSSAL_CROWN.get(),
             ModItems.VOID_GAUNTLET.get(),
-            ModItems.FATE_DICE.get()
+            ModItems.FATE_DICE.get(),
+            ModItems.CURSE_REVERSAL.get()
     );
 
     public static List<Item> tier1() {
@@ -57,9 +62,9 @@ public final class TrinketTier {
 
     public static int fuelCost(Item item) {
         return switch (tierOf(item)) {
-            case TIER_1 -> 4;
-            case TIER_2 -> 8;
-            case TIER_3 -> 16;
+            case TIER_1 -> 16;
+            case TIER_2 -> 32;
+            case TIER_3 -> 64;
             default -> 0;
         };
     }

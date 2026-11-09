@@ -6,9 +6,15 @@
     },
     {
       "item": "minecraft:iron_ingot"
+    },
+    {
+      "item": "minecraft:shield"
+    },
+    {
+      "item": "minecraft:scute"
     }
   ],
-  "fragment_cost": 4,
+  "fragment_cost": 16,
   "result": {
     "item": "nightmare_core:vigil_carapace"
   }

@@ -64,6 +64,12 @@ dependencies {
     // JEI integration is optional at runtime.
     compileOnly files("libs/jei-1.20.1-forge-${jei_version}.jar")
     runtimeOnly files("libs/jei-1.20.1-forge-${jei_version}.jar")
+
+    // KubeJS recipe schema integration is optional at runtime.
+    compileOnly files("libs/kubejs-forge-${kubejs_version}.jar")
+    compileOnly files("libs/rhino-forge-${rhino_version}.jar")
+    runtimeOnly files("libs/kubejs-forge-${kubejs_version}.jar")
+    runtimeOnly files("libs/rhino-forge-${rhino_version}.jar")
 }
 
 tasks.withType(JavaCompile).configureEach {

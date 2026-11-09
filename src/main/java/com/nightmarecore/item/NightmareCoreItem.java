@@ -33,7 +33,7 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 
 /**
  * The core is now a pure curse item: it grants three blessing slots and applies
- * seven curses, but does not modify any attributes directly.
+ * eight curses, but does not modify any attributes directly.
  */
 public class NightmareCoreItem extends Item implements ICurioItem {
 

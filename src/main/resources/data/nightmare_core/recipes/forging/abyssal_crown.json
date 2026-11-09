@@ -2,16 +2,25 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:ember_crown"
+    },
+    {
+      "item": "minecraft:nether_star"
+    },
+    {
       "item": "nightmare_core:ashen_cinder"
     },
     {
       "item": "nightmare_core:tidal_tear"
     },
     {
-      "item": "minecraft:nether_star"
+      "item": "minecraft:obsidian"
+    },
+    {
+      "item": "minecraft:wither_skeleton_skull"
     }
   ],
-  "fragment_cost": 16,
+  "fragment_cost": 64,
   "result": {
     "item": "nightmare_core:abyssal_crown"
   }

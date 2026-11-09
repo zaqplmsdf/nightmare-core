@@ -6,9 +6,15 @@
     },
     {
       "item": "minecraft:spyglass"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:amethyst_shard"
     }
   ],
-  "fragment_cost": 4,
+  "fragment_cost": 16,
   "result": {
     "item": "nightmare_core:dreamhunter_eye"
   }

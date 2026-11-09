@@ -1,0 +1,21 @@
+{
+  "type": "nightmare_core:forging",
+  "ingredients": [
+    {
+      "item": "nightmare_core:ashen_cinder"
+    },
+    {
+      "item": "minecraft:glowstone_dust"
+    },
+    {
+      "item": "minecraft:gold_ingot"
+    },
+    {
+      "item": "minecraft:white_wool"
+    }
+  ],
+  "fragment_cost": 16,
+  "result": {
+    "item": "nightmare_core:moonlit_charm"
+  }
+}

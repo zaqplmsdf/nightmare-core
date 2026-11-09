@@ -26,21 +26,31 @@ LEGACY_TRINKETS = [
 
 # name: (ingredients, fragment cost)
 FORGING_RECIPES = {
-    "ember_heart": (["nightmare_core:ashen_cinder", "minecraft:blaze_powder"], 4),
-    "dreamrend_fang": (["nightmare_core:rift_shard", "minecraft:iron_sword"], 4),
-    "fleet_feather": (["nightmare_core:hollow_shell", "minecraft:feather"], 4),
-    "stonebound_pendant": (["nightmare_core:ashen_cinder", "minecraft:stone"], 4),
-    "vigil_carapace": (["nightmare_core:vigil_eye", "minecraft:iron_ingot"], 4),
-    "echo_bell": (["nightmare_core:hollow_shell", "minecraft:amethyst_shard"], 4),
-    "dreamhunter_eye": (["nightmare_core:vigil_eye", "minecraft:spyglass"], 4),
-    "ember_crown": (["nightmare_core:ashen_cinder", "minecraft:gold_ingot"], 8),
-    "tidal_pendant": (["nightmare_core:tidal_tear", "minecraft:prismarine_shard"], 8),
-    "rift_eye": (["nightmare_core:rift_shard", "minecraft:ender_pearl"], 8),
-    "vigil_lantern": (["nightmare_core:vigil_eye", "minecraft:glowstone"], 8),
-    "hollow_charm": (["nightmare_core:hollow_shell", "minecraft:bone"], 8),
-    "abyssal_crown": (["nightmare_core:ashen_cinder", "nightmare_core:tidal_tear", "minecraft:nether_star"], 16),
-    "void_gauntlet": (["nightmare_core:rift_shard", "nightmare_core:hollow_shell", "minecraft:nether_star"], 16),
-    "fate_dice": (["nightmare_core:vigil_eye", "nightmare_core:hollow_shell", "minecraft:nether_star"], 16),
+    # Tier 1: direct material crafts. Fuel 16.
+    "ember_heart": (["nightmare_core:ashen_cinder", "minecraft:blaze_powder", "minecraft:glistering_melon_slice", "minecraft:ghast_tear"], 16),
+    "dreamrend_fang": (["nightmare_core:rift_shard", "minecraft:iron_sword", "minecraft:flint", "minecraft:phantom_membrane"], 16),
+    "fleet_feather": (["nightmare_core:hollow_shell", "minecraft:feather", "minecraft:sugar", "minecraft:rabbit_foot"], 16),
+    "stonebound_pendant": (["nightmare_core:ashen_cinder", "minecraft:stone", "minecraft:obsidian", "minecraft:iron_ingot"], 16),
+    "vigil_carapace": (["nightmare_core:vigil_eye", "minecraft:iron_ingot", "minecraft:shield", "minecraft:scute"], 16),
+    "echo_bell": (["nightmare_core:hollow_shell", "minecraft:amethyst_shard", "minecraft:gold_ingot", "minecraft:echo_shard"], 16),
+    "dreamhunter_eye": (["nightmare_core:vigil_eye", "minecraft:spyglass", "minecraft:glowstone_dust", "minecraft:amethyst_shard"], 16),
+    "moonlit_charm": (["nightmare_core:ashen_cinder", "minecraft:glowstone_dust", "minecraft:gold_ingot", "minecraft:white_wool"], 16),
+    "bloodmoon_bracer": (["nightmare_core:tidal_tear", "minecraft:redstone_block", "minecraft:iron_ingot", "minecraft:leather"], 16),
+
+    # Tier 2: requires the matching Tier 1 trinket. Fuel 32.
+    "ember_crown": (["nightmare_core:ember_heart", "nightmare_core:ashen_cinder", "minecraft:gold_ingot", "minecraft:blaze_powder", "minecraft:nether_brick"], 32),
+    "tidal_pendant": (["nightmare_core:stonebound_pendant", "nightmare_core:tidal_tear", "minecraft:prismarine_shard", "minecraft:heart_of_the_sea", "minecraft:lapis_lazuli"], 32),
+    "rift_eye": (["nightmare_core:dreamhunter_eye", "nightmare_core:rift_shard", "minecraft:ender_pearl", "minecraft:amethyst_shard", "minecraft:glowstone_dust"], 32),
+    "vigil_lantern": (["nightmare_core:vigil_carapace", "nightmare_core:vigil_eye", "minecraft:glowstone", "minecraft:gold_ingot", "minecraft:soul_lantern"], 32),
+    "hollow_charm": (["nightmare_core:echo_bell", "nightmare_core:hollow_shell", "minecraft:bone", "minecraft:leather", "minecraft:iron_ingot"], 32),
+    "moonshadow_cloak": (["nightmare_core:fleet_feather", "minecraft:phantom_membrane", "minecraft:blue_ice", "minecraft:feather", "minecraft:leather"], 32),
+    "bloodpact_ring": (["nightmare_core:dreamrend_fang", "minecraft:gold_ingot", "minecraft:redstone_block", "minecraft:ghast_tear", "minecraft:lapis_lazuli"], 32),
+
+    # Tier 3: requires the matching Tier 2 trinket. Fuel 64.
+    "abyssal_crown": (["nightmare_core:ember_crown", "minecraft:nether_star", "nightmare_core:ashen_cinder", "nightmare_core:tidal_tear", "minecraft:obsidian", "minecraft:wither_skeleton_skull"], 64),
+    "void_gauntlet": (["nightmare_core:hollow_charm", "minecraft:nether_star", "nightmare_core:rift_shard", "nightmare_core:hollow_shell", "minecraft:echo_shard", "minecraft:obsidian"], 64),
+    "fate_dice": (["nightmare_core:rift_eye", "minecraft:nether_star", "nightmare_core:vigil_eye", "nightmare_core:hollow_shell", "minecraft:amethyst_shard", "minecraft:gold_block"], 64),
+    "curse_reversal": (["nightmare_core:vigil_lantern", "minecraft:nether_star", "minecraft:echo_shard", "minecraft:amethyst_shard", "minecraft:gold_block", "minecraft:ghast_tear"], 64),
 }
 
 

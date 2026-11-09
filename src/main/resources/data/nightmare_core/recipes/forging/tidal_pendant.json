@@ -2,13 +2,22 @@
   "type": "nightmare_core:forging",
   "ingredients": [
     {
+      "item": "nightmare_core:stonebound_pendant"
+    },
+    {
       "item": "nightmare_core:tidal_tear"
     },
     {
       "item": "minecraft:prismarine_shard"
+    },
+    {
+      "item": "minecraft:heart_of_the_sea"
+    },
+    {
+      "item": "minecraft:lapis_lazuli"
     }
   ],
-  "fragment_cost": 8,
+  "fragment_cost": 32,
   "result": {
     "item": "nightmare_core:tidal_pendant"
   }

@@ -29,7 +29,7 @@ import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 
 /**
- * Implements the seven core curses and their blessing-based suppression.
+ * Implements the eight core curses and their blessing-based suppression.
  */
 @Mod.EventBusSubscriber(modid = NightmareCore.MOD_ID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public final class CurseEventHandler {
@@ -145,8 +145,28 @@ public final class CurseEventHandler {
     @SubscribeEvent
     public static void onHeal(LivingHealEvent event) {
         if (!(event.getEntity() instanceof ServerPlayer player)
-                || !CurioUtil.hasNightmareCore(player)
-                || CurseType.HEALTH_CAP.isSuppressed(player)) {
+                || !CurioUtil.hasNightmareCore(player)) {
+            return;
+        }
+
+        // Curse 8: healing is reversed into damage.
+        if (CurseType.active(player, CurseType.REVERSAL)) {
+            float amount = event.getAmount();
+            event.setCanceled(true);
+            float percent = (float) (double) Config.CURSE_REVERSAL_DAMAGE_PERCENT.get() / 100.0F;
+            float damage = amount * percent;
+            if (damage <= 0.0F) {
+                return;
+            }
+            if (player.getHealth() <= damage) {
+                player.setHealth(1.0F);
+            } else {
+                player.hurt(player.damageSources().magic(), damage);
+            }
+            return;
+        }
+
+        if (CurseType.HEALTH_CAP.isSuppressed(player)) {
             return;
         }
         float cap = healthCap(player);
