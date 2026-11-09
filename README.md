@@ -6,7 +6,7 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
-> **0.8.10**：修复梦魇之眸同时出现 0.8 与僵尸碰撞箱的问题；加入佩戴梦核后的夜间自然生成，并按月相提高指定梦魇权重。
+> **0.8.11**：修复撕咬动画不播放的问题：GeckoLib 动画键统一为 `glare` / `bite` / `move`，并同步控制器触发名。
 
 
 
@@ -24,7 +24,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.10.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.11.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 3. 启动游戏。首次启动会生成 `config/nightmare_core-common.toml`。
@@ -294,12 +294,13 @@ Curios 和 GeckoLib 都是硬前置，未安装时游戏会在加载阶段提示
 - 模型类：`NightmareEyeGeoModel`
 - 渲染器：`NightmareEyeGeoRenderer`
 - 动画：
-  - `animation.riven_eyeball.glare`：远程凝视攻击
-  - `animation.riven_eyeball.bite`：近战啃咬攻击
-  - `animation.riven_eyeball.move`：移动与待机循环
+  - `glare`：远程凝视攻击
+  - `bite`：近战啃咬攻击
+  - `move`：移动与待机循环
+- 原始 `riven_eyeball.animation.json` 使用完整键名，已统一规范为 GeckoLib 控制器使用的短名 `glare` / `bite` / `move`。
 - 使用 GeckoLib 4.8.3 驱动；其余四种梦魇仍使用僵尸模型占位。
 - 近距离时梦魇之眸改用近战 AI，并触发 `bite`；距离较远时触发 `glare` 并发射弹射物。
-- 0.8.9 已重新复制模型、纹理和动画资源，并通过 GeckoLib `GeoModel` + `GeoEntityRenderer` 加载。
+- 0.8.10 已重新复制模型、纹理和动画资源，并通过 GeckoLib `GeoModel` + `GeoEntityRenderer` 加载。
 
 ### 撕咬时序与飞行
 
@@ -494,12 +495,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.10.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.11.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-b9f159020e7aea7c7877e4ea69ddae6514abf1e4eb1df9162ae90fd112897a48  nightmare_core-1.20.1-0.8.10.jar
+366ae73708a869e4ebfa9601293c2716daf1762a9a3bc10146aa6c7921075184  nightmare_core-1.20.1-0.8.11.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios 本身仍需由整合包单独安装。
@@ -527,8 +528,9 @@ b9f159020e7aea7c7877e4ea69ddae6514abf1e4eb1df9162ae90fd112897a48  nightmare_core
 - **村民行为**：梦魇与村民近距离共处 8 秒后村民仍为 20 生命；`setTarget` 会拒绝村民/流浪商人。
 - **飞行测试**：在 `y=-59` 召唤梦魇之眸，无目标时稳定在 `y≈-59`（地面约 `y=-60`，约 1 格高度）；锁定目标后可在 0.5–2 格范围内升降。
 - **碰撞箱**：`getDimensions` 对梦魇之眸返回 `0.8×0.8` 底面、`0.8` 高度；直接创建和自然生成的实测尺寸均为 `0.8×0.8`。
-- **模型重置**：新的 `riven_eyeball.geo.json` 含 26 根骨骼、1624 个立方体；动画键为完整 `animation.riven_eyeball.*`。
+- **模型重置**：新的 `riven_eyeball.geo.json` 含 26 根骨骼、1624 个立方体；动画键已统一为 `glare` / `bite` / `move`。
 - **撕咬时序**：动画/音效在攻击开始时触发，伤害在 10 tick 后结算。
+- **撕咬修复**：动画键与控制器触发名一致，均为短名；避免完整 `animation.riven_eyeball.*` 不匹配导致动画不播放。
 - **自然生成测试**：未佩戴梦核时 `beforeCore=false`；佩戴后 `hasCore=true`，100% 判定下成功生成 6 只并达到附近上限。
 - **月相权重**：满月测试 `phaseFavored=0`，对应梦魇之眸。
 - **旧实体修复**：旧存档中的梦魇之眸会在 tick 检测到非 0.8 尺寸时自动 `refreshDimensions()`。
@@ -539,7 +541,7 @@ b9f159020e7aea7c7877e4ea69ddae6514abf1e4eb1df9162ae90fd112897a48  nightmare_core
 - **配方检查**：`nightmare_core` 的配方与配方 Advancement 已从数据包中移除，当前共 **18 个配方**。
 - **诅咒配置测试**：服务端生成 `curses.*` 全部 10 个配置项及中文注释，默认值与代码读取一致。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
-- 0.8.10 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
+- 0.8.11 打包了 **18 个配方**和对应的 18 个解锁 Advancement；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
 - **同种赐福唯一性测试**：临时假人放入余烬心室后，再尝试放入第二件同名饰品返回 `duplicateBlocked=true`，放入不同赐福返回 `differentAllowed=true`，且核心展开的赐福槽数量为 3。
 - **核心锁定与余烬之刃测试**：生存模式下 `survivalLocked=true`；余烬之刃使用后 `coreAfterBlade=false`、核心回到背包 `coreInInventory=1`、耐久消耗 `bladeDamage=64`。

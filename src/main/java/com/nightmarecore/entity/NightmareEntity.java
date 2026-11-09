@@ -177,7 +177,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     }
 
     private void rangedAttack(LivingEntity target) {
-        this.triggerAnim("attack", "animation.riven_eyeball.glare");
+        this.triggerAnim("attack", "glare");
         NightmareProjectile projectile = new NightmareProjectile(
                 this.level(), this, (float) (double) Config.EYE_PROJECTILE_DAMAGE.get());
         double dx = target.getX() - this.getX();
@@ -198,7 +198,7 @@ public class NightmareEntity extends Zombie implements GeoEntity {
             if (target instanceof LivingEntity living) {
                 this.biteTicks = 10;
                 this.biteTarget = living;
-                this.triggerAnim("attack", "animation.riven_eyeball.bite");
+                this.triggerAnim("attack", "bite");
                 this.level().playSound(null, this.getX(), this.getY(), this.getZ(),
                         ModSounds.NIGHTMARE_EYE_BITE.get(), SoundSource.HOSTILE, 0.9F, 1.0F);
                 return true;
@@ -297,14 +297,11 @@ public class NightmareEntity extends Zombie implements GeoEntity {
     @Override
     public void registerControllers(AnimatableManager.ControllerRegistrar controllers) {
         controllers.add(new AnimationController<>(this, "movement", 5,
-                state -> state.setAndContinue(RawAnimation.begin()
-                        .thenLoop("animation.riven_eyeball.move"))));
+                state -> state.setAndContinue(RawAnimation.begin().thenLoop("move"))));
         controllers.add(new AnimationController<>(this, "attack", 0,
                 state -> PlayState.STOP)
-                .triggerableAnim("animation.riven_eyeball.glare",
-                        RawAnimation.begin().thenPlay("animation.riven_eyeball.glare"))
-                .triggerableAnim("animation.riven_eyeball.bite",
-                        RawAnimation.begin().thenPlay("animation.riven_eyeball.bite")));
+                .triggerableAnim("glare", RawAnimation.begin().thenPlay("glare"))
+                .triggerableAnim("bite", RawAnimation.begin().thenPlay("bite")));
     }
 
     @Override
