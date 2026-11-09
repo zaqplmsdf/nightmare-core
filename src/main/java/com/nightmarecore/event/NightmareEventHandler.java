@@ -9,7 +9,6 @@ import com.nightmarecore.registry.ModItems;
 import com.nightmarecore.util.CurioUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
@@ -17,12 +16,9 @@ import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.Difficulty;
-import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
 import net.minecraftforge.event.entity.player.PlayerSleepInBedEvent;
 import net.minecraftforge.eventbus.api.EventPriority;
@@ -76,42 +72,8 @@ public final class NightmareEventHandler {
      * Package-visible for the development mechanics test.
      */
     public static boolean spawnNightmare(ServerLevel level, Player target, BlockPos bed) {
-        for (int attempt = 0; attempt < 32; attempt++) {
-            int dx = level.random.nextInt(11) - 5;
-            int dz = level.random.nextInt(11) - 5;
-            if (Math.abs(dx) < 2 && Math.abs(dz) < 2) {
-                continue;
-            }
-            int baseY = bed.getY() + level.random.nextInt(5) - 2;
-            BlockPos pos = new BlockPos(bed.getX() + dx, baseY, bed.getZ() + dz);
-            BlockState below = level.getBlockState(pos.below());
-            if (!level.isEmptyBlock(pos) || !level.isEmptyBlock(pos.above())
-                    || !below.isFaceSturdy(level, pos.below(), Direction.UP)) {
-                continue;
-            }
-
-            NightmareEntity nightmare = ModEntities.createRandom(level, level.random);
-            if (nightmare == null) {
-                continue;
-            }
-            nightmare.moveTo(pos.getX() + 0.5D, pos.getY(), pos.getZ() + 0.5D,
-                    level.random.nextFloat() * 360.0F, 0.0F);
-            if (!level.noCollision(nightmare)) {
-                continue;
-            }
-
-            nightmare.getPersistentData().putBoolean(NIGHTMARE_TAG, true);
-            // A nightmare should not burn away when the player sleeps until dawn.
-            nightmare.addEffect(new MobEffectInstance(MobEffects.FIRE_RESISTANCE, Integer.MAX_VALUE, 0, false, false));
-            nightmare.setTarget(target);
-
-            level.addFreshEntity(nightmare);
-            level.sendParticles(ParticleTypes.SOUL_FIRE_FLAME,
-                    pos.getX() + 0.5D, pos.getY() + 0.5D, pos.getZ() + 0.5D,
-                    22, 0.5D, 0.7D, 0.5D, 0.03D);
-            return true;
-        }
-        return false;
+        return NightmareGroupSpawner.spawnGroup(level, target, bed,
+                NightmareGroupSpawner.MAX_GROUP, true) > 0;
     }
 
     @SubscribeEvent(priority = EventPriority.HIGHEST)

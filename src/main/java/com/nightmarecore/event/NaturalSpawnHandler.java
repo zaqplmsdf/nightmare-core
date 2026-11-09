@@ -3,7 +3,6 @@ package com.nightmarecore.event;
 import com.nightmarecore.Config;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.entity.NightmareEntity;
-import com.nightmarecore.registry.ModEntities;
 import com.nightmarecore.util.CurioUtil;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -78,18 +77,9 @@ public final class NaturalSpawnHandler {
                 continue;
             }
 
-            NightmareEntity nightmare = ModEntities.createRandom(level, player.getRandom());
-            if (nightmare == null) {
-                return false;
-            }
-            nightmare.moveTo(x + 0.5D, top.getY(), z + 0.5D,
-                    player.getRandom().nextFloat() * 360.0F, 0.0F);
-            if (!level.noCollision(nightmare)) {
-                continue;
-            }
-            level.addFreshEntity(nightmare);
-            nightmare.setTarget(player);
-            return true;
+            int remaining = maxNearby - nearby;
+            int spawned = NightmareGroupSpawner.spawnGroup(level, player, top, remaining, false);
+            return spawned > 0;
         }
         return false;
     }
