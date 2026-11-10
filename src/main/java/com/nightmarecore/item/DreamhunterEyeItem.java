@@ -10,10 +10,12 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.GameRules;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
@@ -41,6 +43,13 @@ public class DreamhunterEyeItem extends Item implements ICurioItem {
     @Override
     public boolean canEquipFromUse(SlotContext slotContext, ItemStack stack) {
         return true;
+    }
+
+    @Override
+    public ICurio.DropRule getDropRule(SlotContext slotContext, DamageSource source,
+                                       int lootingLevel, boolean recentlyHit, ItemStack stack) {
+        return BlessingItem.keepOnDeath(slotContext)
+                ? ICurio.DropRule.ALWAYS_KEEP : ICurio.DropRule.DEFAULT;
     }
 
     @Override
