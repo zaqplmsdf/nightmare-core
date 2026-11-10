@@ -163,7 +163,7 @@ public final class DeathRestoreHandler {
         SlotContext coreSlot = new SlotContext(
                 CurioSlots.NIGHTMARE, player, 0, false, true);
         UUID uuid = CuriosApi.getSlotUuid(coreSlot);
-        handler.addTransientSlotModifier(CurioSlots.BLESSING, uuid,
+        handler.addPermanentSlotModifier(CurioSlots.BLESSING, uuid,
                 "nightmare_core:core_blessing_slots", 3,
                 net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION);
         handler.processSlots();
