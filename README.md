@@ -6,6 +6,8 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
+> **0.8.21**：修复旧版槽位修饰残留导致的 6 个赐福槽；装备/登录/重生时会清空赐福槽上的旧修饰，只保留一个 +3 永久修饰。
+>
 > **0.8.20**：梦核的赐福槽改为**永久 Curios 槽位修饰**，在装备时写入持久数据，不再依赖物品动态属性；死亡/重进后槽位不会收缩。
 >
 > **0.8.19**：再次修复 keepInventory 死亡后赐福被卸下；赐福槽恢复改为持久槽位修饰，不会在后续 tick 中被 Curios 清掉。
@@ -38,7 +40,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.20.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.21.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 4. 可选：安装 JEI 15.20.0+ 以查看梦魇工坊配方。
@@ -587,12 +589,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.20.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.21.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-54c187dfd8ddeded9bf8c6448144eaf80479e56d68a6c4abeb580c6a1a7b54c3  nightmare_core-1.20.1-0.8.20.jar
+62a9057addad436fe4ba9dca87aa057b9df1175a8668b0226be93d0a0bcc9ada  nightmare_core-1.20.1-0.8.21.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar`、`libs/geckolib-forge-1.20.1-4.8.3.jar`、`libs/jei-1.20.1-forge-15.20.0.130.jar`、`libs/kubejs-forge-2001.6.5-build.16.jar` 和 `libs/rhino-forge-2001.2.3-build.10.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios、GeckoLib 为硬前置；JEI 与 KubeJS 为可选前置。
@@ -643,7 +645,8 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **登录恢复**：退出时把梦核/赐福槽快照写入玩家持久数据；重进后恢复 3 个赐福槽并按快照重新装备。服务端模拟测试结果为 `core=true heart=true crown=true slots=3 inv=0`。
 - **死亡恢复（持久槽位）**：死亡/重生模拟事件链路后连续调用 5 次 Curios `processSlots`，结果仍为 `core=true heart=true crown=true slots=3 inv=0`；槽位修饰使用 permanent，不会被后续槽位刷新清除。
 - **永久槽位测试**：`writeTag` → `readTag` 后梦核仍在、赐福槽为 3，证明槽位修饰随 Curios 持久数据保存。
-- 0.8.20 打包了上述内容；服务器正常加载，无数据包解析错误。
+- **旧槽位迁移测试**：先人为添加一个旧 +3 修饰，`ensure` 前为 3 槽，清理并重加后仍为 3 槽，连续两次调用仍为 3，不会叠成 6。
+- 0.8.21 打包了上述内容；服务器正常加载，无数据包解析错误。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
 - 0.8.17 打包了 **32 个配方** 与 **10 个配方进度**；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。

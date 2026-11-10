@@ -49,7 +49,16 @@ public class NightmareCoreItem extends Item implements ICurioItem {
      * inventory and therefore survive death and world relog.
      */
     public static void ensureBlessingSlots(ServerPlayer player, ICuriosItemHandler handler) {
-        handler.removeSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID);
+        // Older versions added a different core slot UUID (and the original
+        // implementation used a transient item attribute). Clear every modifier
+        // on the blessing slot before re-adding the single permanent +3 modifier,
+        // otherwise a migrated save can keep both the old and new +3 modifiers.
+        handler.getStacksHandler(CurioSlots.BLESSING).ifPresent(stacks -> {
+            stacks.clearModifiers();
+            stacks.clearCachedModifiers();
+        });
+        handler.processSlots();
+
         handler.addPermanentSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID,
                 BLESSING_SLOT_NAME, ModBalance.BLESSING_SLOTS,
                 AttributeModifier.Operation.ADDITION);
