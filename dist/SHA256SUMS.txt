@@ -1,1 +1,1 @@
-333a7b7b7c52e22aef28512929e99e9d1626cae51ddc656c4aefc02edcdc99bc  nightmare_core-1.20.1-0.8.15.jar
+28a98d19d943d36d2e28e88a2ac9953fe888ea5bc7879d80fda9abc061287cf4  nightmare_core-1.20.1-0.8.16.jar

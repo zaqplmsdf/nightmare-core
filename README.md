@@ -6,6 +6,8 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
+> **0.8.16**：修复死亡开启 `keepInventory` 后重生时赐福被自动卸下的问题；现在会按死亡前快照重新装备梦核与赐福。
+>
 > **0.8.15**：修复开启 `keepInventory` 时赐福仍会从 Curios 槽掉落的问题。
 >
 > **0.8.14**：七种压制赐福改为三级饰品；赐福改为逐级晋升；梦魇碎片与材料消耗大幅提高；新增一级/二级赐福与 KubeJS 配方接口。
@@ -28,7 +30,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.15.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.16.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 4. 可选：安装 JEI 15.20.0+ 以查看梦魇工坊配方。
@@ -554,12 +556,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.15.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.16.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-333a7b7b7c52e22aef28512929e99e9d1626cae51ddc656c4aefc02edcdc99bc  nightmare_core-1.20.1-0.8.15.jar
+28a98d19d943d36d2e28e88a2ac9953fe888ea5bc7879d80fda9abc061287cf4  nightmare_core-1.20.1-0.8.16.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar`、`libs/geckolib-forge-1.20.1-4.8.3.jar`、`libs/jei-1.20.1-forge-15.20.0.130.jar`、`libs/kubejs-forge-2001.6.5-build.16.jar` 和 `libs/rhino-forge-2001.2.3-build.10.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios、GeckoLib 为硬前置；JEI 与 KubeJS 为可选前置。
@@ -605,7 +607,8 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **JEI**：编译期接入 JEI 15.20.0；客户端注册梦魇工坊锻造分类与催化剂。
 - **群体生成测试**：诅咒 1 单次触发实测生成 6 只不同梦魇；自然生成与睡眠遭遇共用 `NightmareGroupSpawner`。
 - **keepInventory 修复**：所有赐福饰品的 Curios `getDropRule` 在 `keepInventory=true` 时返回 `ALWAYS_KEEP`，不会在死亡时掉落；关闭该规则时保持原版掉落行为。
-- 0.8.15 打包了上述内容；服务器正常加载，无数据包解析错误。
+- **重生恢复**：死亡时记录梦核与赐福槽位快照；重生后先补装梦核并恢复 3 个赐福槽，再按快照把赐福重新放回槽位。服务端模拟测试结果为 `core=true heart=true crown=true slots=3 inv=0`，即梦核与两件赐福均重新装备且背包无残留。
+- 0.8.16 打包了上述内容；服务器正常加载，无数据包解析错误。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
 - 0.8.14 打包了 **26 个配方**（22 个工坊锻造 + 3 个工具 + 1 个工坊方块）；服务器正常加载，无数据包解析错误。
 - 配置文件已实际生成中文 TOML 注释；逐字节检查为合法 UTF-8。
