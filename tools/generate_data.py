@@ -93,6 +93,15 @@ def write_recipe(recipe_id, recipe, unlock_item):
         json.dumps(advancement, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
 
+def shapeless(recipe_id, ingredients, result_item, count, unlock_item):
+    recipe = {
+        "type": "minecraft:crafting_shapeless",
+        "ingredients": [item(value) for value in ingredients],
+        "result": {"item": result_item, "count": count},
+    }
+    write_recipe(recipe_id, recipe, unlock_item)
+
+
 def write_forging(recipe_id, ingredients, fragment_cost):
     recipe = {
         "type": "nightmare_core:forging",
@@ -135,6 +144,27 @@ def main():
          "S": item("minecraft:stone"), "B": item("minecraft:crafting_table")},
         FRAGMENT,
     )
+    shaped(
+        "nightmare_matter",
+        ["FFF", "FFF", "FFF"],
+        {"F": item(FRAGMENT)},
+        FRAGMENT,
+    )
+
+    for trinket in [
+        "moonlit_charm",
+        "bloodmoon_bracer",
+        "dusk_charm",
+        "dream_sand_pouch",
+        "thorn_bracer",
+    ]:
+        shapeless(
+            f"recycle_{trinket}",
+            [f"nightmare_core:{trinket}"],
+            FRAGMENT,
+            4,
+            f"nightmare_core:{trinket}",
+        )
 
     for name, (ingredients, cost) in FORGING_RECIPES.items():
         write_forging(name, ingredients, cost)

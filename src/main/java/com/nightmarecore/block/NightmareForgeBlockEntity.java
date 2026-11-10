@@ -37,6 +37,7 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
 
     private final NonNullList<ItemStack> items = NonNullList.withSize(SLOT_COUNT, ItemStack.EMPTY);
     private int progress;
+    private int storedFuel;
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> new InvWrapper(this));
 
     public NightmareForgeBlockEntity(BlockPos pos, BlockState state) {
@@ -68,9 +69,46 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
     }
 
     private boolean hasFuel(int cost) {
-        ItemStack fuel = this.getItem(FUEL_SLOT);
-        return fuel.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())
-                && fuel.getCount() >= cost;
+        return fuelValue(this.getItem(FUEL_SLOT)) + this.storedFuel >= cost;
+    }
+
+    private static int fuelValue(ItemStack stack) {
+        return stack.getCount() * unitFuelValue(stack);
+    }
+
+    private static int unitFuelValue(ItemStack stack) {
+        if (stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())) {
+            return 1;
+        }
+        if (stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_MATTER.get())) {
+            return 10;
+        }
+        return 0;
+    }
+
+    /**
+     * Consumes exactly {@code cost} fuel value. A nightmare matter is worth 10;
+     * any unused value is kept in the block entity for the next craft.
+     */
+    private boolean consumeFuel(int cost) {
+        int remaining = cost;
+        int used = Math.min(this.storedFuel, remaining);
+        this.storedFuel -= used;
+        remaining -= used;
+
+        while (remaining > 0) {
+            ItemStack fuel = this.getItem(FUEL_SLOT);
+            int value = unitFuelValue(fuel);
+            if (value <= 0) {
+                return false;
+            }
+            this.removeItem(FUEL_SLOT, 1);
+            this.storedFuel += value;
+            used = Math.min(this.storedFuel, remaining);
+            this.storedFuel -= used;
+            remaining -= used;
+        }
+        return true;
     }
 
     private boolean canOutput(ItemStack result) {
@@ -83,12 +121,14 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
     }
 
     private void craft(NightmareForgeRecipe recipe) {
+        if (!this.consumeFuel(recipe.getFragmentCost())) {
+            return;
+        }
         for (int slot = INPUT_START; slot < INPUT_START + INPUT_COUNT; slot++) {
             if (!this.getItem(slot).isEmpty()) {
                 this.removeItem(slot, 1);
             }
         }
-        this.removeItem(FUEL_SLOT, recipe.getFragmentCost());
 
         ItemStack result = recipe.getResult().copy();
         ItemStack output = this.getItem(OUTPUT_SLOT);
@@ -175,6 +215,7 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
     @Override
     public void clearContent() {
         this.items.clear();
+        this.storedFuel = 0;
         this.setChanged();
     }
 
@@ -184,7 +225,8 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
             return false;
         }
         if (slot == FUEL_SLOT) {
-            return stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get());
+            return stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())
+                    || stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_MATTER.get());
         }
         return true;
     }
@@ -199,6 +241,7 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
         super.saveAdditional(tag);
         ContainerHelper.saveAllItems(tag, this.items);
         tag.putInt("Progress", this.progress);
+        tag.putInt("StoredFuel", this.storedFuel);
     }
 
     @Override
@@ -207,6 +250,7 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
         this.items.clear();
         ContainerHelper.loadAllItems(tag, this.items);
         this.progress = tag.getInt("Progress");
+        this.storedFuel = tag.getInt("StoredFuel");
     }
 
     @Override
@@ -225,6 +269,19 @@ public class NightmareForgeBlockEntity extends BlockEntity implements Container,
             }
         }
         this.items.clear();
+        int fuel = this.storedFuel;
+        this.storedFuel = 0;
+        while (fuel > 0) {
+            int count = Math.min(fuel, 64);
+            net.minecraft.world.Containers.dropItemStack(this.level,
+                    this.worldPosition.getX(), this.worldPosition.getY(), this.worldPosition.getZ(),
+                    new ItemStack(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get(), count));
+            fuel -= count;
+        }
+    }
+
+    public int getStoredFuel() {
+        return this.storedFuel;
     }
 
     public Component getDisplayName() {

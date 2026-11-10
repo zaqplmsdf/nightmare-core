@@ -1,0 +1,12 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "ingredients": [
+    {
+      "item": "nightmare_core:bloodmoon_bracer"
+    }
+  ],
+  "result": {
+    "item": "nightmare_core:nightmare_fragment",
+    "count": 4
+  }
+}

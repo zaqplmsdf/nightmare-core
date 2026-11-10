@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "FFF",
+    "FFF",
+    "FFF"
+  ],
+  "key": {
+    "F": {
+      "item": "nightmare_core:nightmare_fragment"
+    }
+  },
+  "result": {
+    "item": "nightmare_core:nightmare_matter"
+  }
+}

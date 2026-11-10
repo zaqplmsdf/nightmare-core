@@ -33,6 +33,9 @@ public final class ModItems {
             () -> new NightmareCoreItem(new Item.Properties().stacksTo(1).rarity(Rarity.EPIC)));
     public static final RegistryObject<Item> NIGHTMARE_FRAGMENT = register("nightmare_fragment",
             () -> new NightmareFragmentItem(new Item.Properties().rarity(Rarity.UNCOMMON)));
+    public static final RegistryObject<Item> NIGHTMARE_MATTER = register("nightmare_matter",
+            () -> new NightmareMaterialItem("nightmare_matter",
+                    new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> ASHEN_CINDER = register("ashen_cinder",
             () -> new NightmareMaterialItem("ashen_cinder", new Item.Properties().rarity(Rarity.UNCOMMON)));
     public static final RegistryObject<Item> TIDAL_TEAR = register("tidal_tear",

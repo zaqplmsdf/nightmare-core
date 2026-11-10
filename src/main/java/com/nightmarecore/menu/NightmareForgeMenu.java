@@ -41,7 +41,8 @@ public class NightmareForgeMenu extends AbstractContainerMenu {
         this.addSlot(new Slot(container, NightmareForgeBlockEntity.FUEL_SLOT, 8, 53) {
             @Override
             public boolean mayPlace(ItemStack stack) {
-                return stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get());
+                return stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())
+                        || stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_MATTER.get());
             }
         });
 
@@ -109,7 +110,8 @@ public class NightmareForgeMenu extends AbstractContainerMenu {
                     return ItemStack.EMPTY;
                 }
             } else {
-                if (stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())) {
+                if (stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_FRAGMENT.get())
+                        || stack.is(com.nightmarecore.registry.ModItems.NIGHTMARE_MATTER.get())) {
                     if (!this.moveItemStackTo(stack, NightmareForgeBlockEntity.FUEL_SLOT,
                             NightmareForgeBlockEntity.FUEL_SLOT + 1, false)) {
                         return ItemStack.EMPTY;

@@ -22,6 +22,7 @@ public final class ModCreativeTabs {
                         output.accept(ModItems.NIGHTMARE_CORE.get());
                         output.accept(ModBlocks.NIGHTMARE_FORGE_ITEM.get());
                         output.accept(ModItems.NIGHTMARE_FRAGMENT.get());
+                        output.accept(ModItems.NIGHTMARE_MATTER.get());
                         output.accept(ModItems.ASHEN_CINDER.get());
                         output.accept(ModItems.TIDAL_TEAR.get());
                         output.accept(ModItems.RIFT_SHARD.get());
