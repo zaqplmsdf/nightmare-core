@@ -104,6 +104,11 @@ public final class DeathRestoreHandler {
 
     private static void restore(ServerPlayer player, PendingRestore pending) {
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            // Curios may have queued the old blessings as invalid stacks while
+            // loading. Flush them into the inventory before re-equipping,
+            // otherwise they are ejected again after this restore.
+            handler.handleInvalidStacks();
+
             boolean corePresent = CurioUtil.hasNightmareCore(player);
             if (!corePresent) {
                 ItemStack coreWanted = pending.core().isEmpty()

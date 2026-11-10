@@ -115,6 +115,10 @@ public final class LoginRestoreHandler {
 
     private static void restore(ServerPlayer player, PendingRestore pending) {
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
+            // Flush Curios' pending invalid stacks first; those are exactly the
+            // blessings that were removed while the slot modifier was missing.
+            handler.handleInvalidStacks();
+
             boolean corePresent = CurioUtil.hasNightmareCore(player);
             if (!corePresent) {
                 ItemStack coreWanted = pending.core().isEmpty()
