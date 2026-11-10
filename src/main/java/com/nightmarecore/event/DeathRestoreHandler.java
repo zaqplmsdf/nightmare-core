@@ -104,15 +104,19 @@ public final class DeathRestoreHandler {
 
     private static void restore(ServerPlayer player, PendingRestore pending) {
         CuriosApi.getCuriosInventory(player).ifPresent(handler -> {
-            if (!CurioUtil.hasNightmareCore(player)) {
+            boolean corePresent = CurioUtil.hasNightmareCore(player);
+            if (!corePresent) {
                 ItemStack coreWanted = pending.core().isEmpty()
                         ? findInInventory(player, com.nightmarecore.registry.ModItems.NIGHTMARE_CORE.get())
                         : pending.core();
                 ItemStack core = takeMatching(player, coreWanted);
                 if (!core.isEmpty()) {
                     handler.setEquippedCurio(CurioSlots.NIGHTMARE, 0, core);
-                    ensureBlessingSlots(player, handler);
+                    corePresent = true;
                 }
+            }
+            if (corePresent) {
+                ensureBlessingSlots(player, handler);
             }
             handler.processSlots();
 
