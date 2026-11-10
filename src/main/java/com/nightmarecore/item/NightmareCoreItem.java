@@ -2,11 +2,9 @@ package com.nightmarecore.item;
 
 import com.nightmarecore.Config;
 import com.nightmarecore.CurioSlots;
-import com.nightmarecore.ModBalance;
 import com.nightmarecore.NightmareCore;
 import com.nightmarecore.util.TextUtil;
 import java.util.List;
-import java.util.UUID;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.ChatFormatting;
 import net.minecraft.core.particles.ParticleTypes;
@@ -15,7 +13,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -30,43 +27,26 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 /**
- * The core is now a pure curse item: it grants three blessing slots and applies
- * seven curses, but does not modify any attributes directly.
+ * The core is a pure curse item: it unlocks the three fixed blessing slots and
+ * applies seven curses, but does not modify any attributes directly.
  */
 public class NightmareCoreItem extends Item implements ICurioItem {
-
-    public static final UUID BLESSING_SLOT_UUID =
-            UUID.fromString("4f5c2a7e-3d1b-4a8c-9f6e-2b7d8c1a5e30");
-    public static final String BLESSING_SLOT_NAME = "nightmare_core:core_blessing_slots";
 
     public NightmareCoreItem(Properties properties) {
         super(properties);
     }
 
     /**
-     * The core's +3 blessing slots are a permanent Curios slot modifier rather
-     * than an item attribute. Permanent modifiers are serialized with the Curios
-     * inventory and therefore survive death and world relog.
+     * The blessing slot type is a fixed three-slot Curios slot. The core gates
+     * whether a blessing can be equipped via {@link #canEquip}, but the slot
+     * count itself never changes. This makes death/relog immune to Curios
+     * slot-modifier reload ordering.
      */
     public static void ensureBlessingSlots(ServerPlayer player, ICuriosItemHandler handler) {
-        // Older versions added a different core slot UUID (and the original
-        // implementation used a transient item attribute). Clear every modifier
-        // on the blessing slot before re-adding the single permanent +3 modifier,
-        // otherwise a migrated save can keep both the old and new +3 modifiers.
         handler.getStacksHandler(CurioSlots.BLESSING).ifPresent(stacks -> {
             stacks.clearModifiers();
             stacks.clearCachedModifiers();
         });
-        handler.processSlots();
-
-        handler.addPermanentSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID,
-                BLESSING_SLOT_NAME, ModBalance.BLESSING_SLOTS,
-                AttributeModifier.Operation.ADDITION);
-        handler.processSlots();
-    }
-
-    public static void removeBlessingSlots(ICuriosItemHandler handler) {
-        handler.removeSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID);
         handler.processSlots();
     }
 
@@ -112,8 +92,6 @@ public class NightmareCoreItem extends Item implements ICurioItem {
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (slotContext.entity() instanceof ServerPlayer player) {
-            CuriosApi.getCuriosInventory(player)
-                    .ifPresent(NightmareCoreItem::removeBlessingSlots);
             player.displayClientMessage(
                     Component.translatable("message.nightmare_core.unequipped").withStyle(ChatFormatting.GRAY),
                     true);

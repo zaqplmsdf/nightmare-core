@@ -275,5 +275,6 @@
   "tooltip.nightmare_core.special_blessing.dream_sand_pouch": "装着从梦里漏下的沙。",
   "tooltip.nightmare_core.special_blessing.thorn_bracer": "荆棘缠上手腕，也缠上敌人。",
   "item.nightmare_core.nightmare_matter": "梦魇质",
-  "tooltip.nightmare_core.material.nightmare_matter": "九个梦魇碎片压缩而成；在梦魇工坊中可提供 10 点碎片燃料。"
+  "tooltip.nightmare_core.material.nightmare_matter": "九个梦魇碎片压缩而成；在梦魇工坊中可提供 10 点碎片燃料。",
+  "message.nightmare_core.blessing.requires_core": "需要先装备梦魇之核才能装备赐福。"
 }

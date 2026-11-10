@@ -275,5 +275,6 @@
   "tooltip.nightmare_core.special_blessing.dream_sand_pouch": "Filled with sand that leaked from a dream.",
   "tooltip.nightmare_core.special_blessing.thorn_bracer": "Thorns coil around your wrist and your foes.",
   "item.nightmare_core.nightmare_matter": "Nightmare Matter",
-  "tooltip.nightmare_core.material.nightmare_matter": "Nine fragments compressed into a fuel worth 10 fragments in the Nightmare Forge."
+  "tooltip.nightmare_core.material.nightmare_matter": "Nine fragments compressed into a fuel worth 10 fragments in the Nightmare Forge.",
+  "message.nightmare_core.blessing.requires_core": "Equip the Nightmare Core before using blessings."
 }
