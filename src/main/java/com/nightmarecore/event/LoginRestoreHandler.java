@@ -2,6 +2,7 @@ package com.nightmarecore.event;
 
 import com.nightmarecore.CurioSlots;
 import com.nightmarecore.NightmareCore;
+import com.nightmarecore.item.NightmareCoreItem;
 import com.nightmarecore.util.CurioUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -19,7 +20,6 @@ import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
@@ -165,18 +165,7 @@ public final class LoginRestoreHandler {
     }
 
     private static void ensureBlessingSlots(ServerPlayer player, ICuriosItemHandler handler) {
-        int slots = handler.getStacksHandler(CurioSlots.BLESSING)
-                .map(stacks -> stacks.getSlots()).orElse(0);
-        if (slots >= 3) {
-            return;
-        }
-        SlotContext coreSlot = new SlotContext(
-                CurioSlots.NIGHTMARE, player, 0, false, true);
-        UUID uuid = CuriosApi.getSlotUuid(coreSlot);
-        handler.addPermanentSlotModifier(CurioSlots.BLESSING, uuid,
-                "nightmare_core:core_blessing_slots", 3,
-                net.minecraft.world.entity.ai.attributes.AttributeModifier.Operation.ADDITION);
-        handler.processSlots();
+        NightmareCoreItem.ensureBlessingSlots(player, handler);
     }
 
     private static int firstEmptySlot(ICurioStacksHandler stacks) {

@@ -1,7 +1,5 @@
 package com.nightmarecore.item;
 
-import com.google.common.collect.LinkedHashMultimap;
-import com.google.common.collect.Multimap;
 import com.nightmarecore.Config;
 import com.nightmarecore.CurioSlots;
 import com.nightmarecore.ModBalance;
@@ -17,7 +15,6 @@ import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.damagesource.DamageSource;
-import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -30,6 +27,7 @@ import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 import top.theillusivec4.curios.api.type.capability.ICurio;
 import top.theillusivec4.curios.api.type.capability.ICurioItem;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 /**
  * The core is now a pure curse item: it grants three blessing slots and applies
@@ -37,21 +35,30 @@ import top.theillusivec4.curios.api.type.capability.ICurioItem;
  */
 public class NightmareCoreItem extends Item implements ICurioItem {
 
+    public static final UUID BLESSING_SLOT_UUID =
+            UUID.fromString("4f5c2a7e-3d1b-4a8c-9f6e-2b7d8c1a5e30");
+    public static final String BLESSING_SLOT_NAME = "nightmare_core:core_blessing_slots";
+
     public NightmareCoreItem(Properties properties) {
         super(properties);
     }
 
-    @Override
-    public Multimap<Attribute, AttributeModifier> getAttributeModifiers(
-            SlotContext slotContext, UUID uuid, ItemStack stack) {
-        Multimap<Attribute, AttributeModifier> modifiers = LinkedHashMultimap.create();
+    /**
+     * The core's +3 blessing slots are a permanent Curios slot modifier rather
+     * than an item attribute. Permanent modifiers are serialized with the Curios
+     * inventory and therefore survive death and world relog.
+     */
+    public static void ensureBlessingSlots(ServerPlayer player, ICuriosItemHandler handler) {
+        handler.removeSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID);
+        handler.addPermanentSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID,
+                BLESSING_SLOT_NAME, ModBalance.BLESSING_SLOTS,
+                AttributeModifier.Operation.ADDITION);
+        handler.processSlots();
+    }
 
-        if (CurioSlots.NIGHTMARE.equals(slotContext.identifier()) && !slotContext.cosmetic()) {
-            CuriosApi.addSlotModifier(
-                    modifiers, CurioSlots.BLESSING, uuid, ModBalance.BLESSING_SLOTS,
-                    AttributeModifier.Operation.ADDITION);
-        }
-        return modifiers;
+    public static void removeBlessingSlots(ICuriosItemHandler handler) {
+        handler.removeSlotModifier(CurioSlots.BLESSING, BLESSING_SLOT_UUID);
+        handler.processSlots();
     }
 
     @Override
@@ -78,7 +85,11 @@ public class NightmareCoreItem extends Item implements ICurioItem {
 
     @Override
     public void onEquip(SlotContext slotContext, ItemStack previousStack, ItemStack stack) {
-        if (slotContext.entity() instanceof ServerPlayer player) {
+        if (slotContext.entity() instanceof ServerPlayer player
+                && CurioSlots.NIGHTMARE.equals(slotContext.identifier())
+                && !slotContext.cosmetic()) {
+            CuriosApi.getCuriosInventory(player)
+                    .ifPresent(handler -> ensureBlessingSlots(player, handler));
             player.displayClientMessage(
                     Component.translatable("message.nightmare_core.equipped").withStyle(ChatFormatting.DARK_PURPLE),
                     true);
@@ -92,6 +103,8 @@ public class NightmareCoreItem extends Item implements ICurioItem {
     @Override
     public void onUnequip(SlotContext slotContext, ItemStack newStack, ItemStack stack) {
         if (slotContext.entity() instanceof ServerPlayer player) {
+            CuriosApi.getCuriosInventory(player)
+                    .ifPresent(NightmareCoreItem::removeBlessingSlots);
             player.displayClientMessage(
                     Component.translatable("message.nightmare_core.unequipped").withStyle(ChatFormatting.GRAY),
                     true);
