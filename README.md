@@ -6,6 +6,8 @@
 
 > 设计核心：**梦核本身不加不减任何属性，只施加七重诅咒。** 玩家可以用最多三件赐福压制三项诅咒，或换取属性/功能，其余诅咒继续生效。
 
+> **0.8.24**：修复开启 `keepInventory`（死亡不掉落）后重生时赐福被卸下的问题。根因是 `PlayerList.respawn` 先移除旧玩家并使 Curios 能力失效，`PlayerEvent.Clone` 期间已无法读取旧饰品栏，死亡快照为空；Curios 重建新玩家饰品栏时又会把暂时无法装备的赐福放进无效队列。现在改为在 `LivingDeathEvent`（能力仍有效、死亡掉落尚未处理）记录梦核与赐福快照，并且只对 keepInventory 死亡在重生后恢复；恢复会逐个 tick 重试，直到赐福回到赐福槽。关闭 keepInventory 时不恢复，赐福仍按 Curios 掉落规则掉落。
+>
 > **0.8.23**：赐福槽改为**固定 3 个 Curios 槽位**（不再动态增加/移除），移除赐福 `canEquip` 的梦核前置检查；Curios 在反序列化时不会再判定赐福无效，死亡/重进不会卸下。未装备梦核时由 tick 检查把赐福退回背包。
 >
 > **0.8.22**：登录/重生恢复前先调用 Curios `handleInvalidStacks()`，把被缓存的无效赐福放回背包后再重新装备。
@@ -44,7 +46,7 @@
 
 ## 安装
 
-1. 将 `nightmare_core-1.20.1-0.8.23.jar` 放入整合包的 `mods/`。
+1. 将 `nightmare_core-1.20.1-0.8.24.jar` 放入整合包的 `mods/`。
 2. 确保 `curios-forge-5.14.1+1.20.1.jar` 或更高兼容版本也在 `mods/`。
 3. 确保 `geckolib-forge-1.20.1-4.8.3.jar` 或更高兼容版本也在 `mods/`。
 4. 可选：安装 JEI 15.20.0+ 以查看梦魇工坊配方。
@@ -593,12 +595,12 @@ $env:JAVA_HOME = 'D:\java\java17'
 .\gradlew.bat build
 ```
 
-产物：`build/libs/nightmare_core-1.20.1-0.8.23.jar`。
+产物：`build/libs/nightmare_core-1.20.1-0.8.24.jar`。
 
 仓库中的 `dist/` 已放置构建完成的 jar 和 `SHA256SUMS.txt`，可以直接分发：
 
 ```
-73662ed5617768073aa35d668c54dd68f2b63d52ed93cab95b3c4514c95f87dc  nightmare_core-1.20.1-0.8.23.jar
+7d3b010a5e7604a7437f505cfa78673441f9eb14f96027881c29bb2fa3e93290  nightmare_core-1.20.1-0.8.24.jar
 ```
 
 `libs/curios-forge-5.14.1+1.20.1.jar`、`libs/geckolib-forge-1.20.1-4.8.3.jar`、`libs/jei-1.20.1-forge-15.20.0.130.jar`、`libs/kubejs-forge-2001.6.5-build.16.jar` 和 `libs/rhino-forge-2001.2.3-build.10.jar` 仅作为本地编译/测试依赖，不会被放进模组 jar，也不会随模组分发。Curios、GeckoLib 为硬前置；JEI 与 KubeJS 为可选前置。
@@ -653,6 +655,11 @@ $env:JAVA_HOME = 'D:\java\java17'
 - **完整重进测试**：`onLogout → writeTag → readTag → onLogin → tick` 后为 `core=true heart=true crown=true slots=3 inv=0`。
 - **完整死亡测试**：`onDeath → readTag → onClone → tick` 后为 `core=true heart=true crown=true slots=3 inv=0`。
 - **固定槽位测试**：`writeTag → readTag` 后为 `core=true heart=true crown=true slots=3 inv=0`，赐福不再被判为无效。
+- **0.8.24 真实重生测试**：在 Forge 47.4.16 + Curios 5.14.1 专用服务器上使用真实 `PlayerList.respawn`（先移除旧玩家、能力失效，再触发 `PlayerEvent.Clone`），并模拟 Curios 把赐福判为无效后放入背包；0.8.24 在重生后第 2 tick 按死亡快照重新装备，结果为 `core=true equipped=[ember_heart@0, dusk_charm@1] invTrinkets=[]`。
+- **0.8.24 对照复现**：同一真实重生测试中，0.8.22 在 40 tick 后仍为 `core=true equipped=[] invTrinkets=[ember_heart@0, dusk_charm@1]`，即赐福留在背包、未回槽；0.8.24 依靠死亡事件快照在第 2 tick 恢复。
+- **0.8.24 掉落行为**：`keepInventory=false` 时掷出 2 个赐福掉落物（`dropEntities=2`），重生后赐福槽保持为空，不会被快照恢复，符合原掉落规则。
+- **0.8.24 旧槽位迁移**：带旧 +3 永久修饰的 6 个赐福槽在重生恢复时收缩为 3 槽，两件赐福仍装备且背包无残留。
+- 0.8.24 打包上述内容；服务器正常加载，无数据包解析错误。
 - 0.8.23 打包了上述内容；服务器正常加载，无数据包解析错误。
 - **专属配置测试**：服务端生成 `[nightmares.eye/skull/shadow/heart/hand]` 五个独立配置段，以及远程距离、减伤、光环半径、效果时长等机制配置。
 - 0.8.17 打包了 **32 个配方** 与 **10 个配方进度**；服务器正常加载，无数据包解析错误。
