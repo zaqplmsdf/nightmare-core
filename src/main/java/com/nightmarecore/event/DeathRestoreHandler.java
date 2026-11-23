@@ -195,6 +195,10 @@ public final class DeathRestoreHandler {
         }
         if (corePresent) {
             NightmareCoreItem.ensureBlessingSlots(player, handler);
+        } else {
+            // No core on the respawned player: do not leave three visible
+            // blessing slots behind.
+            NightmareCoreItem.lockBlessingSlots(handler);
         }
         handler.processSlots();
 

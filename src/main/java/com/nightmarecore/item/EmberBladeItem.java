@@ -100,6 +100,9 @@ public class EmberBladeItem extends Item {
 
         ItemStack core = nightmare.getStacks().getStackInSlot(0).copy();
         inventory.setEquippedCurio(CurioSlots.NIGHTMARE, 0, ItemStack.EMPTY);
+        // Remove the blessing slots together with the core; direct slot writes
+        // do not fire onUnequip, so drive the lock explicitly.
+        NightmareCoreItem.handleCoreLost(serverPlayer, inventory);
         if (!serverPlayer.getInventory().add(core)) {
             serverPlayer.drop(core, false);
         }

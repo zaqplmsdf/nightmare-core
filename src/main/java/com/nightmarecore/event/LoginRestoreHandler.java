@@ -132,6 +132,10 @@ public final class LoginRestoreHandler {
             }
             if (corePresent) {
                 ensureBlessingSlots(player, handler);
+            } else {
+                // No core: keep the blessing slots collapsed instead of
+                // showing three unusable slots after login.
+                NightmareCoreItem.lockBlessingSlots(handler);
             }
             handler.processSlots();
 
